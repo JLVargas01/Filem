@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import com.spiralsoft.filem.ui.AppNavHost
 import com.spiralsoft.filem.ui.theme.FilemTheme
 
 class MainActivity : ComponentActivity() {
@@ -33,7 +34,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             FilemTheme {
-                FileExplorerScreen()
+                AppNavHost()
             }
         }
     }
