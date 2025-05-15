@@ -1,56 +1,55 @@
-/*
-** Define rutas, pantallas y controladores
-*/
-
 package com.spiralsoft.filem.ui
 
-import com.spiralsoft.filem.ui.screens.FileExplorerScreen
 import android.net.Uri
-import androidx.navigation.NavType
+import android.os.Environment
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import android.os.Environment
+import com.spiralsoft.filem.ui.screens.FileExplorerScreen
 import com.spiralsoft.filem.ui.screens.SettingsScreen
+import com.spiralsoft.filem.ui.theme.ThemeViewModel
+
+object Routes {
+    const val Explorer = "explorer"
+    const val Settings = "settings"
+}
 
 @Composable
-fun AppNavHost(navController: NavHostController = rememberNavController()) {
-    NavHost(navController = navController, startDestination = "explorer") {
+fun AppNavHost(themeViewModel: ThemeViewModel) {
 
-        // Ruta inicial (sin path), usamos el path por defecto
-        composable("explorer") {
-            val defaultPath = Environment.getExternalStorageDirectory().absolutePath
-            FileExplorerScreen(
-                path = defaultPath,
-                onNavigateTo = { newPath -> navController.navigate("explorer?path=${Uri.encode(newPath)}") }
-            )
-        }
+    val navController = rememberNavController()
 
-        // Ruta con path personalizado
+    NavHost(
+        navController = navController,
+        startDestination = "${Routes.Explorer}?path={path}"
+    ) {
+
         composable(
-            "explorer?path={path}",
+            route = "${Routes.Explorer}?path={path}",
             arguments = listOf(
                 navArgument("path") {
                     type = NavType.StringType
-                    nullable = false
                     defaultValue = Environment.getExternalStorageDirectory().absolutePath
                 }
             )
         ) { backStackEntry ->
-            val path = backStackEntry.arguments?.getString("path")!!
+            val path = backStackEntry.arguments?.getString("path") ?: ""
             FileExplorerScreen(
                 path = path,
-                onNavigateTo = { newPath -> navController.navigate("explorer?path=${Uri.encode(newPath)}") }
+                onNavigateTo = { newPath ->
+                    navController.navigate("${Routes.Explorer}?path=${Uri.encode(newPath)}")
+                },
+                onNavigateToSettings = {
+                    navController.navigate(Routes.Settings)
+                }
             )
         }
 
-        composable("Settings"){
-            SettingsScreen(onBack = {
-                navController.popBackStack()
-            })
+        composable(Routes.Settings) {
+            SettingsScreen(navController, themeViewModel)
         }
 
     }
