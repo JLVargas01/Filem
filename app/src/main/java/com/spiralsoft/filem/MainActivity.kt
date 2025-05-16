@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import com.spiralsoft.filem.utils.PermissionUtils
 import android.widget.Toast
+import com.spiralsoft.filem.ui.theme.FilemTheme
 
 class MainActivity : ComponentActivity() {
 
@@ -14,7 +15,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         requestStoragePermissions()
         setContent {
-            AppNavHost()
+            FilemTheme {
+                AppNavHost()
+            }
         }
     }
 
