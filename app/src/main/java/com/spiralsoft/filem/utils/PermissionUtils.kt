@@ -1,4 +1,4 @@
-package com.spiralsoft.filem
+package com.spiralsoft.filem.utils
 
 import android.Manifest
 import android.app.Activity
@@ -25,7 +25,7 @@ object PermissionUtils {
         }
     }
 
-    fun requestPermissionsPreR(launcher: ActivityResultLauncher<Array<String>>) {
+    fun requestLegacyStoragePermissions(launcher: ActivityResultLauncher<Array<String>>) {
         launcher.launch(
             arrayOf(
                 Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -35,7 +35,7 @@ object PermissionUtils {
     }
 
     @RequiresApi(Build.VERSION_CODES.R)
-    fun requestPermissions(activity: Activity) {
+    fun requestAllFilesAccessPermission(activity: Activity) {
         val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
         intent.data = ("package:" + activity.packageName).toUri()
         activity.startActivity(intent)
