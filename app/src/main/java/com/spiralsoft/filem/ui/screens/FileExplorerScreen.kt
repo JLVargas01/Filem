@@ -50,6 +50,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.Alignment
+import androidx.compose.animation.AnimatedVisibility
 import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -64,6 +65,7 @@ fun FileExplorerScreen(
     val current = File(state.currentPath).canonicalPath
     val root = File(rootPath).canonicalPath
     val isRoot = current == root
+    val isFromRoot = !isRoot && current.startsWith(root)
     val relativePath = current.removePrefix("$root/") // "DCIM/Camera"
     val segments = if (!isRoot && current.startsWith(root)) relativePath.split("/") else emptyList()
 
@@ -170,17 +172,45 @@ fun FileExplorerScreen(
                         modifier = Modifier.padding(top = 24.dp)
                     )
                 } else {
-                    LazyColumn {
-                        items(state.files) { file ->
-                            FileItem(file = file, onClick = {
-                                if (file.isDirectory) {
-                                    viewModel.loadFiles(file.absolutePath)
-                                    onNavigateTo(file.absolutePath)
+                    AnimatedVisibility(visible = isFromRoot) {
+                        LazyColumn {
+                            items(state.files) { file ->
+                                AnimatedVisibility(visible = isFromRoot) {
+                                    FileItem(file = file, onClick = {
+                                        if (file.isDirectory) {
+                                            viewModel.loadFiles(file.absolutePath)
+                                            onNavigateTo(file.absolutePath)
+                                        }
+                                    })
                                 }
-                            })
+
+                                if (!isFromRoot) {
+                                    FileItem(file = file, onClick = {
+                                        if (file.isDirectory) {
+                                            viewModel.loadFiles(file.absolutePath)
+                                            onNavigateTo(file.absolutePath)
+                                        }
+                                    })
+                                }
+                            }
+                        }
+                    }
+
+                    // fallback sin animación
+                    if (!isFromRoot) {
+                        LazyColumn {
+                            items(state.files) { file ->
+                                FileItem(file = file, onClick = {
+                                    if (file.isDirectory) {
+                                        viewModel.loadFiles(file.absolutePath)
+                                        onNavigateTo(file.absolutePath)
+                                    }
+                                })
+                            }
                         }
                     }
                 }
+
             }
         }
     )
