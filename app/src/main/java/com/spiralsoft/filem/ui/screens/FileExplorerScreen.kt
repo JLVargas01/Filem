@@ -5,6 +5,7 @@ import com.spiralsoft.filem.viewmodel.FileExplorerViewModel
 import com.spiralsoft.filem.viewmodel.SortMode
 import android.os.Environment
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,10 +17,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.AssistChip
+import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
@@ -44,6 +48,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.Alignment
 import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,14 +60,17 @@ fun FileExplorerScreen(
 ) {
 
     val state by viewModel.state.collectAsState()
-    val rootPath = Environment.getExternalStorageDirectory().absolutePath
-    val parent = File(state.currentPath).parent
-    val isRoot = rootPath == state.currentPath
+    val rootPath = remember { Environment.getExternalStorageDirectory().absolutePath }
+    val current = File(state.currentPath).canonicalPath
+    val root = File(rootPath).canonicalPath
+    val isRoot = current == root
+    val relativePath = current.removePrefix("$root/") // "DCIM/Camera"
+    val segments = if (!isRoot && current.startsWith(root)) relativePath.split("/") else emptyList()
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Explorador de archivos") },
+                title = { Text("Filem") },
                 actions = {
                     SortMenu(
                         currentSort = state.sortMode,
@@ -77,6 +86,57 @@ fun FileExplorerScreen(
                     .padding(innerPadding)
                     .padding(16.dp)
             ) {
+                if (segments.isNotEmpty()) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        AssistChip(
+                            onClick = {
+                                viewModel.loadFiles(root)
+                                onNavigateTo(root)
+                            },
+                            label = { Text("Inicio") },
+                            colors = AssistChipDefaults.assistChipColors()
+                        )
+                        Row(
+                            modifier = Modifier
+                                .horizontalScroll(rememberScrollState())
+                                .weight(1f),
+                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            var cumulativePath = root
+                            segments.forEachIndexed { index, segment ->
+                                val isLast = index == segments.lastIndex
+                                cumulativePath = "$cumulativePath/$segment"
+
+                                AssistChip(
+                                    onClick = {
+                                        viewModel.loadFiles(cumulativePath)
+                                        onNavigateTo(cumulativePath)
+                                    },
+                                    label = {
+                                        Text(
+                                            text = segment,
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis
+                                        )
+                                    },
+                                    colors = if (isLast)
+                                        AssistChipDefaults.assistChipColors(
+                                            containerColor = MaterialTheme.colorScheme.primaryContainer
+                                        )
+                                    else
+                                        AssistChipDefaults.assistChipColors()
+                                )
+                            }
+                        }
+                    }
+                }
+                val parent = File(state.currentPath).parent
                 if (!isRoot) {
                     Row(
                         modifier = Modifier
@@ -94,8 +154,8 @@ fun FileExplorerScreen(
                         }
 
                         Button(onClick = {
-                            viewModel.loadFiles(rootPath)
-                            onNavigateTo(rootPath)
+                            viewModel.loadFiles(root)
+                            onNavigateTo(root)
                         }) {
                             Icon(Icons.Default.Home, contentDescription = "Inicio")
                             Spacer(modifier = Modifier.width(4.dp))
@@ -103,13 +163,6 @@ fun FileExplorerScreen(
                         }
                     }
                 }
-
-                Text(
-                    text = "📂 ${state.currentPath}",
-                    style = MaterialTheme.typography.titleSmall,
-                    modifier = Modifier.padding(bottom = 8.dp)
-                )
-
                 if (state.files.isEmpty()) {
                     Text(
                         text = "No hay archivos en esta carpeta.",
