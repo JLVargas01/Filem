@@ -5,8 +5,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.spiralsoft.filem.ui.screens.FileExplorerScreen
+import com.spiralsoft.filem.ui.screens.HubFileExplorerScreen
+import android.net.Uri
 
 object Routes {
+    const val HUBEXPLORER = "hubexplorer"
     const val EXPLORER = "explorer"
 }
 
@@ -17,13 +20,25 @@ fun AppNavHost() {
 
     NavHost(
         navController = navController,
-        startDestination = Routes.EXPLORER
+        startDestination = Routes.HUBEXPLORER
     ) {
-        composable(Routes.EXPLORER) {
+        composable(Routes.HUBEXPLORER) {
+            HubFileExplorerScreen(
+                onNavigateTo = { path ->
+                    navController.navigate("${Routes.EXPLORER}/${Uri.encode(path)}")
+                }
+            )
+        }
+        composable("${Routes.EXPLORER}/{path}") { backStackEntry ->
+            val path = backStackEntry.arguments?.getString("path")?.let { Uri.decode(it) }
+                ?: return@composable
+
             FileExplorerScreen(
-                onNavigateTo = {}
+                initialPath = path,
+                onNavigateTo = { newPath ->
+                    navController.navigate("${Routes.EXPLORER}/${Uri.encode(newPath)}")
+                }
             )
         }
     }
-
 }
