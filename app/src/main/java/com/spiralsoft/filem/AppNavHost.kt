@@ -8,9 +8,11 @@ import com.spiralsoft.filem.ui.screens.FileExplorerScreen
 import com.spiralsoft.filem.ui.screens.HubFileExplorerScreen
 import android.net.Uri
 
-object Routes {
-    const val HUBEXPLORER = "hubexplorer"
-    const val EXPLORER = "explorer"
+sealed class Screen(val route: String) {
+    object Hub : Screen("hub")
+    object Explorer : Screen("explorer/{path}") {
+        fun createRoute(path: String) = "explorer/${Uri.encode(path)}"
+    }
 }
 
 @Composable
@@ -20,23 +22,26 @@ fun AppNavHost() {
 
     NavHost(
         navController = navController,
-        startDestination = Routes.HUBEXPLORER
+        startDestination = AppNavigator.Hub.ROUTE
     ) {
-        composable(Routes.HUBEXPLORER) {
+        composable(AppNavigator.Hub.ROUTE) {
             HubFileExplorerScreen(
                 onNavigateTo = { path ->
-                    navController.navigate("${Routes.EXPLORER}/${Uri.encode(path)}")
+                    navController.navigate(AppNavigator.Explorer.createRoute(path))
                 }
             )
         }
-        composable("${Routes.EXPLORER}/{path}") { backStackEntry ->
-            val path = backStackEntry.arguments?.getString("path")?.let { Uri.decode(it) }
-                ?: return@composable
+
+        composable(
+            route = AppNavigator.Explorer.ROUTE,
+            arguments = listOf(AppNavigator.Explorer.navArgument())
+        ) { backStackEntry ->
+            val path = AppNavigator.Explorer.extractPath(backStackEntry)
 
             FileExplorerScreen(
                 initialPath = path,
                 onNavigateTo = { newPath ->
-                    navController.navigate("${Routes.EXPLORER}/${Uri.encode(newPath)}")
+                    navController.navigate(AppNavigator.Explorer.createRoute(newPath))
                 }
             )
         }
