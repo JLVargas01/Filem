@@ -10,39 +10,56 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.Alignment
+import com.spiralsoft.filem.ui.components.DirectoryItem
+import com.spiralsoft.filem.ui.components.FileItem
 import com.spiralsoft.filem.viewmodel.HubFileExplorerState
 
 @Composable
 fun HubContent(
-    state: HubFileExplorerState,
-    modifier: Modifier = Modifier,
-    onNavigateTo: (String) -> Unit
+    state: HubFileExplorerState, // Estado de la pantalla
+    modifier: Modifier = Modifier, // Modificador para personalizar la apariencia
+    onNavigateTo: (String) -> Unit // Función para navegar a una ruta
 ) {
     when {
+
+        // Mostrar el indicador de carga
         state.isLoading -> {
             Box(modifier = modifier, contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
         }
 
-        state.directories.isEmpty() -> {
+        // Mostrar el contenido de la lista de directorios
+        state.directories.isEmpty() && state.files.isEmpty() -> {
             Box(modifier = modifier, contentAlignment = Alignment.Center) {
                 Text("No se encontraron directorios disponibles.")
             }
         }
 
+        // Mostrar el contenido de la lista de directorios
         else -> {
             LazyColumn(
                 modifier = modifier,
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
+
+                // Item para directorios
                 items(state.directories) { dir ->
                     DirectoryItem(
                         dir = dir,
                         onClick = { onNavigateTo(dir.absolutePath) }
                     )
                 }
+
+                // Item de archivo
+                items(state.files) { file ->
+                    FileItem(
+                        dir = file,
+                        onClick = { onNavigateTo(file.absolutePath) }
+                    )
+                }
             }
         }
+
     }
 }
