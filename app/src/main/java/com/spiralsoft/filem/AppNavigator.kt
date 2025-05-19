@@ -21,13 +21,16 @@ object AppNavigator {
             return "$BASE/${Uri.encode(path)}"
         }
 
-        fun navArgument(): NamedNavArgument {
-            return navArgument("path") { type = NavType.StringType }
+        fun navArguments(): List<NamedNavArgument> {
+            return listOf(
+                navArgument("path") { type = NavType.StringType }
+            )
         }
 
         fun extractPath(backStackEntry: NavBackStackEntry): String {
             return backStackEntry.arguments?.getString("path")?.let { Uri.decode(it) }
                 ?: Environment.getExternalStorageDirectory().absolutePath
         }
+
     }
 }
