@@ -17,11 +17,11 @@ class FileExplorerViewModel : ViewModel() {
 
     init {
         loadDirectory(initialPath)
+        loadFiles(initialPath)
     }
 
     fun loadDirectory(path: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            // Quita el borrado inmediato de los directorios
             _state.value = _state.value.copy(
                 isLoading = true,
                 currentPath = path
@@ -39,5 +39,23 @@ class FileExplorerViewModel : ViewModel() {
         }
     }
 
+    fun loadFiles(path: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _state.value = _state.value.copy(
+                isLoading = true,
+                currentPath = path
+            )
+
+            val dir = File(path)
+            val subFiels = dir.listFiles()?.filter {
+                it.isFile && it.canRead() && !it.isHidden
+            }.orEmpty()
+
+            _state.value = _state.value.copy(
+                files = subFiels,
+                isLoading = false
+            )
+        }
+    }
 
 }
