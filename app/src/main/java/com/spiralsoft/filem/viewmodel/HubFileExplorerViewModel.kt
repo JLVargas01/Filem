@@ -26,10 +26,12 @@ class HubFileExplorerViewModel : ViewModel() {
 
             val internalStorage = Environment.getExternalStorageDirectory()
             if (internalStorage.exists() && internalStorage.canRead()) {
-                roots.add(internalStorage)
+                val subDirs = internalStorage.listFiles()?.filter {
+                    it.isDirectory && it.canRead() && !it.isHidden
+                }.orEmpty()
+                roots.addAll(subDirs)
             }
 
-            // Agrega tarjetas SD si existen
             val externalDirs = File("/storage").listFiles()?.filter {
                 it.exists() && it.canRead() && it.isDirectory && it != internalStorage
             }.orEmpty()
@@ -41,4 +43,5 @@ class HubFileExplorerViewModel : ViewModel() {
             )
         }
     }
+
 }
