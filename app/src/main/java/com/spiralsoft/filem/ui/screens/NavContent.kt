@@ -11,8 +11,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.Alignment
 import com.spiralsoft.filem.ui.components.DirectoryItem
+import com.spiralsoft.filem.ui.components.FileItem
 import com.spiralsoft.filem.viewmodel.FileExplorerState
-import com.spiralsoft.filem.viewmodel.HubFileExplorerState
 
 @Composable
 fun NavContent(
@@ -42,10 +42,18 @@ fun NavContent(
                 modifier = modifier,
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
+                // Item para directorios
                 items(state.directories) { dir ->
                     DirectoryItem(
                         dir = dir,
                         onClick = { onNavigateTo(dir.absolutePath) }
+                    )
+                }
+                // Item de archivo
+                items(state.files) { file ->
+                    FileItem(
+                        dir = file,
+                        onClick = { onNavigateTo(file.absolutePath) }
                     )
                 }
             }
