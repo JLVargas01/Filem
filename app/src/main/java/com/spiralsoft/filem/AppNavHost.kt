@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.spiralsoft.filem.ui.screens.HubFileExplorerScreen
+import com.spiralsoft.filem.ui.screens.FileExplorerScreen
 
 @Composable
 fun AppNavHost() {
@@ -16,7 +17,7 @@ fun AppNavHost() {
         startDestination = AppNavigator.Hub.ROUTE
     ) {
 
-        // Pantalla principal (Hub)
+        // Pantalla principal del rootPath (Hub)
         composable(
             route = AppNavigator.Hub.ROUTE
         ) {
@@ -28,7 +29,18 @@ fun AppNavHost() {
         }
 
         // Pantalla al navegar por directorios
-        //TODO
+        composable(
+            route = AppNavigator.Explorer.ROUTE,
+            arguments = AppNavigator.Explorer.navArguments()
+        ) { backStackEntry ->
+            val path = AppNavigator.Explorer.extractPath(backStackEntry)
+            FileExplorerScreen(
+                directoryPath = path,
+                onNavigateToFile = { nextPath ->
+                    navController.navigate(AppNavigator.Explorer.createRoute(nextPath))
+                }
+            )
+        }
 
     }
 }
