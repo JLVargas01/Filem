@@ -1,4 +1,4 @@
-package com.spiralsoft.filem.ui.screens
+package com.spiralsoft.filem.ui.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,7 +28,7 @@ fun DirectoryItem(
     onClick: () -> Unit
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth().clickable { /*onClick() No hace nada si se clica*/ },
+        modifier = Modifier.fillMaxWidth().clickable { onClick() },
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         shape = RoundedCornerShape(12.dp)
     ) {
