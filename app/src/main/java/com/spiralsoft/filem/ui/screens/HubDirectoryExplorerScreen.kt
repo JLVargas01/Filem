@@ -17,21 +17,23 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.spiralsoft.filem.viewmodel.HubFileExplorerViewModel
+import com.spiralsoft.filem.viewmodel.HubDirectoryExplorerViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HubFileExplorerScreen(
-    viewModel: HubFileExplorerViewModel = viewModel(),
-    onNavigateToFile: (String) -> Unit
+    viewModel: HubDirectoryExplorerViewModel = viewModel(), // ViewModel de la pantalla
+    onNavigateToFile: (String) -> Unit // Función para navegar a una ruta
 ) {
-    val state by viewModel.state.collectAsState()
+
+    val state by viewModel.state.collectAsState() // Estado de la pantalla
 
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("Filem - Inicio") })
         }
     ) { innerPadding ->
+        // Contenido de la pantalla
         HubContent(
             state = state,
             modifier = Modifier
