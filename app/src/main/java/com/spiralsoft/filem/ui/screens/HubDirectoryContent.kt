@@ -12,11 +12,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.Alignment
 import com.spiralsoft.filem.ui.components.DirectoryItem
 import com.spiralsoft.filem.ui.components.FileItem
-import com.spiralsoft.filem.viewmodel.HubFileExplorerState
+import com.spiralsoft.filem.viewmodel.HubDirectoryExplorerState
 
 @Composable
 fun HubContent(
-    state: HubFileExplorerState, // Estado de la pantalla
+    state: HubDirectoryExplorerState, // Estado de la pantalla
     modifier: Modifier = Modifier, // Modificador para personalizar la apariencia
     onNavigateTo: (String) -> Unit // Función para navegar a una ruta
 ) {
