@@ -26,6 +26,7 @@ fun FileExplorerScreen(
 
     LaunchedEffect(directoryPath) {
         viewModel.loadDirectory(directoryPath)
+        viewModel.loadFiles(directoryPath)
     }
 
     Scaffold(
