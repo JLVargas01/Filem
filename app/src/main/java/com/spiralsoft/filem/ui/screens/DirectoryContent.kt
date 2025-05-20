@@ -1,5 +1,6 @@
 package com.spiralsoft.filem.ui.screens
 
+import android.provider.ContactsContract.Directory
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
@@ -12,11 +13,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.Alignment
 import com.spiralsoft.filem.ui.components.DirectoryItem
 import com.spiralsoft.filem.ui.components.FileItem
-import com.spiralsoft.filem.viewmodel.FileExplorerState
+import com.spiralsoft.filem.viewmodel.DirectoryExplorerViewState
 
 @Composable
-fun NavContent(
-    state: FileExplorerState, // Estado de la pantalla
+fun DirectoryContent(
+    state: DirectoryExplorerViewState, // Estado de la pantalla
     modifier: Modifier = Modifier, // Modificador para personalizar la apariencia
     onNavigateTo: (String) -> Unit // Función para navegar a una ruta
 ) {
