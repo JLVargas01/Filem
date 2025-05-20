@@ -32,7 +32,7 @@ fun HubContent(
         // Mostrar el contenido de la lista de directorios
         state.directories.isEmpty() && state.files.isEmpty() -> {
             Box(modifier = modifier, contentAlignment = Alignment.Center) {
-                Text("No se encontraron directorios disponibles.")
+                Text("Vacio")
             }
         }
 
