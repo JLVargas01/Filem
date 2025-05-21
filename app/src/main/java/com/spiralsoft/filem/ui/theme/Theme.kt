@@ -1,15 +1,19 @@
 package com.spiralsoft.filem.ui.theme
 
-import androidx.compose.material3.*
+import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
+import androidx.compose.material3.MaterialTheme
 
 private val LightColors = lightColorScheme(
     primary = LightBlue80,
     onPrimary = LightBlue40,
     secondary = LightDarkBlue,
     background = LightGray,
+//    surface = DarkSurface,
+//   onBackground = DarkOnBackground,
+//    onSurface = DarkOnBackground,
     error = ErrorRed
 )
 
@@ -26,15 +30,16 @@ private val DarkColors = darkColorScheme(
 
 @Composable
 fun FilemTheme(
-    darkTheme: Boolean = true,  //El tema por defecto es oscuro
-    content: @Composable () -> Unit
+    isDarkTheme: Boolean = true,  //El tema por defecto es oscuro
+    contentApp: @Composable () -> Unit
 ) {
-    val colors = if (darkTheme) DarkColors else LightColors
+
+    val colorsApp: ColorScheme = if (isDarkTheme) DarkColors else LightColors
 
     MaterialTheme(
-        colorScheme = colors,
-        typography = Typography,
-        shapes = Shapes,
-        content = content
+        colorScheme = colorsApp,
+        shapes = ShapesApp,
+        typography = TypographyApp,
+        content = contentApp
     )
 }
