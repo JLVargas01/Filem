@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.ui.Alignment
 import com.spiralsoft.filem.R
+import com.spiralsoft.filem.utils.cleanPath
 import java.io.File
 
 @Composable
@@ -46,11 +47,11 @@ fun FileItem(
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = dir.name.ifBlank { dir.absolutePath },
+                    text = dir.name.ifBlank { dir.absolutePath.cleanPath() },
                     style = MaterialTheme.typography.titleMedium
                 )
                 Text(
-                    text = dir.absolutePath,
+                    text = dir.absolutePath.cleanPath(),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
