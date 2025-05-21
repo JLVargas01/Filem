@@ -17,7 +17,9 @@ fun AppNavHost() {
         startDestination = AppNavigator.Hub.ROUTE
     ) {
 
-        // Pantalla principal del rootPath (Hub)
+        /**
+        * Pantalla principal del rootPath (Hub)
+        */
         composable(
             route = AppNavigator.Hub.ROUTE
         ) {
@@ -28,13 +30,18 @@ fun AppNavHost() {
             )
         }
 
-        // Pantalla al navegar por directorios (usa path como argumento)
+        /**
+         * Pantalla de explorador de archivos
+        */
         composable(
             route = AppNavigator.Explorer.ROUTE,
             arguments = AppNavigator.Explorer.navArguments()
         ) { backStackEntry ->
             val path = AppNavigator.Explorer.extractPath(backStackEntry)
-            DirectoryExplorerScreen(initialPath = path)
+            DirectoryExplorerScreen(
+                initialPath = path,
+                onNavigateBack = { navController.popBackStack() }
+            )
         }
 
     }
