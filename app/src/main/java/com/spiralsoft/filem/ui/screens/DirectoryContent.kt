@@ -1,6 +1,5 @@
 package com.spiralsoft.filem.ui.screens
 
-import android.provider.ContactsContract.Directory
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
@@ -33,7 +32,7 @@ fun DirectoryContent(
         // Mostrar el contenido de la lista de directorios
         state.directories.isEmpty() && state.files.isEmpty() -> {
             Box(modifier = modifier, contentAlignment = Alignment.Center) {
-                Text("No se encontraron directorios disponibles.")
+                Text("Vacio")
             }
         }
 
