@@ -38,7 +38,7 @@ class HubDirectoryExplorerViewModel : ViewModel() {
                     it.isFile && it.canRead() && !it.isHidden
                 }.orEmpty()
                 rootDirectories.addAll(subDirs)
-                rootDirectories.addAll(subFiles)
+                rootFiles.addAll(subFiles)
             }
 
             // Buscar el contenido del almacenamiento externo
