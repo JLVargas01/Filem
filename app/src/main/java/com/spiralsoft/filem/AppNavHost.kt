@@ -36,11 +36,11 @@ fun AppNavHost() {
         composable(
             route = AppNavigator.Explorer.ROUTE,
             arguments = AppNavigator.Explorer.navArguments()
-        ) { backStackEntry ->
-            val path = AppNavigator.Explorer.extractPath(backStackEntry)
+        ) {
             DirectoryExplorerScreen(
-                initialPath = path,
-                onNavigateBack = { navController.popBackStack() }
+                onNavigateBack = {
+                    navController.popBackStack()
+                }
             )
         }
 
