@@ -11,7 +11,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -22,15 +21,10 @@ import com.spiralsoft.filem.viewmodel.DirectoryExplorerViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DirectoryExplorerScreen(
-    initialPath: String, // Ruta inicial
-    onNavigateBack: () -> Unit, // ViewModel de la pantalla
-    viewModel: DirectoryExplorerViewModel = viewModel() // ViewModel de la pantalla
+    onNavigateBack: () -> Unit // Función para navegar hacia atrás
 ) {
 
-    LaunchedEffect(Unit) {
-        viewModel.initWithPath(initialPath)
-    }
-
+    val viewModel: DirectoryExplorerViewModel = viewModel()
     val state by viewModel.state.collectAsState()
 
     Scaffold(
