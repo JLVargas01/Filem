@@ -17,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.spiralsoft.filem.utils.cleanPath
 import com.spiralsoft.filem.viewmodel.DirectoryExplorerViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,7 +37,7 @@ fun DirectoryExplorerScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Filem - ${state.currentPath}") },
+                title = { Text("Filem - ${state.currentPath.cleanPath()}") },
                 navigationIcon = {
                     IconButton(onClick = {
                         if (!viewModel.navigateBack()) {
