@@ -22,9 +22,7 @@ object AppNavigator {
         }
 
         fun navArguments(): List<NamedNavArgument> {
-            return listOf(
-                navArgument("path") { type = NavType.StringType }
-            )
+            return listOf(navArgument("path") { type = NavType.StringType })
         }
 
         fun extractPath(backStackEntry: NavBackStackEntry): String {
