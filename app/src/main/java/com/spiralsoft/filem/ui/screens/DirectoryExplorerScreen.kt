@@ -23,25 +23,27 @@ import com.spiralsoft.filem.viewmodel.DirectoryExplorerViewModel
 @Composable
 fun DirectoryExplorerScreen(
     initialPath: String, // Ruta inicial
+    onNavigateBack: () -> Unit, // ViewModel de la pantalla
     viewModel: DirectoryExplorerViewModel = viewModel() // ViewModel de la pantalla
 ) {
 
-    val state by viewModel.state.collectAsState() // Estado de la pantalla
-
-    // Se inicializa el ViewModel con la ruta inicial
     LaunchedEffect(Unit) {
         viewModel.initWithPath(initialPath)
     }
+
+    val state by viewModel.state.collectAsState()
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("Filem - ${state.currentPath}") },
                 navigationIcon = {
-                    if (state.currentPath != initialPath) {
-                        IconButton(onClick = { viewModel.navigateBack() }) {
-                            Icon(Icons.Default.KeyboardArrowUp, contentDescription = "Atrás")
+                    IconButton(onClick = {
+                        if (!viewModel.navigateBack()) {
+                            onNavigateBack()
                         }
+                    }) {
+                        Icon(Icons.Default.KeyboardArrowUp, contentDescription = "Atrás")
                     }
                 }
             )
