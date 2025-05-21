@@ -19,6 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.ui.Alignment
+import com.spiralsoft.filem.utils.cleanPath
 import com.spiralsoft.filem.R
 import java.io.File
 
@@ -46,11 +47,11 @@ fun DirectoryItem(
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = dir.name.ifBlank { dir.absolutePath },
+                    text = dir.name.ifBlank { dir.absolutePath.cleanPath() },
                     style = MaterialTheme.typography.titleMedium
                 )
                 Text(
-                    text = dir.absolutePath,
+                    text = dir.absolutePath.cleanPath(),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
