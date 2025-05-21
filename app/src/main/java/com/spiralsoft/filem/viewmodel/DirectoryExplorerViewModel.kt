@@ -1,6 +1,7 @@
 package com.spiralsoft.filem.viewmodel
 
 import android.os.Environment
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -9,22 +10,22 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.StateFlow
 import java.io.File
 
-class DirectoryExplorerViewModel : ViewModel() {
+class DirectoryExplorerViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
 
-    private val initialPath: String = Environment.getExternalStorageDirectory().absolutePath // Ruta del directorio actual
-    private val pathStack: MutableList<String> = mutableListOf() // Pila de rutas
+    private val initialPath: String = savedStateHandle["path"]
+        ?: Environment.getExternalStorageDirectory().absolutePath // Ruta del directorio actual
+    private val pathStack: MutableList<String> = mutableListOf(initialPath) // Pila de rutas
     private val _state: MutableStateFlow<DirectoryExplorerViewState> =
         MutableStateFlow(DirectoryExplorerViewState(currentPath = initialPath)) // Estado de la pantalla
     val state: StateFlow<DirectoryExplorerViewState> get() = _state // Estado publico de la pantalla
 
     /**
-     *  Inicializa la pantalla con el directorio especificado
-     *  @param path Ruta del directorio inicial
+     * Agregar el path a la lista de rutas y cargar el contenido del directorio
      */
-    fun initWithPath(path: String) {
+    init {
         if (pathStack.isEmpty()) {
-            pathStack.add(path)
-            loadPath(path)
+            pathStack.add(initialPath)
+            loadPath(initialPath)
         }
     }
 
