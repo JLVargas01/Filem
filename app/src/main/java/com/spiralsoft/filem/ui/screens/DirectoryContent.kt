@@ -52,8 +52,7 @@ fun DirectoryContent(
                 // Item de archivo
                 items(state.files) { file ->
                     FileItem(
-                        dir = file,
-                        onClick = { onNavigateTo(file.absolutePath) }
+                        dir = file
                     )
                 }
             }
