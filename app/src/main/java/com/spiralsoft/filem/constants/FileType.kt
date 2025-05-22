@@ -18,14 +18,14 @@ enum class FileType(val iconRes: Int) {
         fun fromFile(file: File): FileType {
             val extension = file.extension.lowercase()
             return when (extension) {
-                "jpg", "jpeg", "png", "gif", "bmp" -> IMAGE
-                "mp3", "wav", "ogg" -> AUDIO
-                "mp4", "avi", "mkv" -> VIDEO
-                "doc", "docx", "txt" -> DOCUMENT
-                "pdf" -> PDF
-                "zip" -> ARCHIVE
-                "DATAFILE" -> DATAFILE
-                else -> UNKNOWN
+                "jpg", "jpeg", "png", "gif", "bmp", "webp" -> IMAGE //Extenciones de imagenes
+                "mp3", "wav", "ogg", "flac", "aac" -> AUDIO //Extenciones de audio
+                "mp4", "avi", "mkv", "mov", "3gp", "webm" -> VIDEO // Extenciones de video
+                "doc", "docx", "txt", "rtf", "odt" -> DOCUMENT // Extenciones de documentos
+                "pdf" -> PDF // Extenciones de pdf
+                "zip", "rar", "7z", "tar", "gz" -> ARCHIVE // Extenciones de archivos comprimidos
+                "csv", "json", "xml", "bin", "dat" -> DATAFILE // Extenciones de archivos de datos
+                else -> UNKNOWN // Desconicidos
             }
         }
     }
