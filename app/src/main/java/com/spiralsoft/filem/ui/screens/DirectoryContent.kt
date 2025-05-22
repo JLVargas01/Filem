@@ -43,14 +43,20 @@ fun DirectoryContent(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 // Item para directorios
-                items(state.directories) { dir ->
+                items(
+                    items = state.directories,
+                    key = { it.absolutePath }
+                ) { dir ->
                     DirectoryItem(
                         dir = dir,
                         onClick = { onNavigateTo(dir.absolutePath) }
                     )
                 }
                 // Item de archivo
-                items(state.files) { file ->
+                items(
+                    items = state.files,
+                    key = { it.absolutePath }
+                ) { file ->
                     FileItem(
                         dir = file
                     )
