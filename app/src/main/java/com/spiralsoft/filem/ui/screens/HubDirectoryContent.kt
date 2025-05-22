@@ -55,7 +55,6 @@ fun HubContent(
                 items(state.files) { file ->
                     FileItem(
                         dir = file,
-                        onClick = { onNavigateTo(file.absolutePath) }
                     )
                 }
             }
