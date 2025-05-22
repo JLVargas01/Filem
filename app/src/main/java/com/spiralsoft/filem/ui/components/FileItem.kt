@@ -24,6 +24,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import coil3.compose.rememberAsyncImagePainter
+import coil3.request.crossfade
 import com.spiralsoft.filem.utils.cleanPath
 import com.spiralsoft.filem.constants.FileType
 import com.spiralsoft.filem.utils.FileOpener
@@ -74,20 +75,28 @@ fun FileItem(
 
 @Composable
 private fun FileIcon(file: File, fileType: FileType) {
-
     when (fileType) {
         FileType.IMAGE -> {
+            val painter = rememberAsyncImagePainter(
+                model = coil3.request.ImageRequest.Builder(LocalContext.current)
+                    .data(file)
+                    .crossfade(true)
+                    //.placeholder() // opcional
+                    //.error(R.drawable.icon_unkdown) // por si falla la carga
+                    .memoryCacheKey(file.absolutePath)
+                    .diskCacheKey(file.absolutePath)
+                    .size(128) // escalar para mejor rendimiento
+                    .build()
+            )
             Image(
-                painter = rememberAsyncImagePainter(file),
+                painter = painter,
                 contentDescription = "Miniatura de imagen",
                 modifier = Modifier
                     .size(48.dp)
                     .clip(RoundedCornerShape(8.dp)),
                 contentScale = ContentScale.Crop
             )
-        }
-
-        else -> {
+        } else -> {
             Image(
                 painter = painterResource(id = fileType.iconRes),
                 contentDescription = "Ícono de archivo",
