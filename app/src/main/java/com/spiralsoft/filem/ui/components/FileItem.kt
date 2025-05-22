@@ -20,7 +20,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import coil3.compose.rememberAsyncImagePainter
 import com.spiralsoft.filem.utils.cleanPath
 import com.spiralsoft.filem.constants.FileType
 import com.spiralsoft.filem.utils.FileOpener
@@ -48,11 +51,8 @@ fun FileItem(
             modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                painter = painterResource(id = fileType.iconRes),
-                contentDescription = "Ícono de archivo",
-                modifier = Modifier.size(24.dp)
-            )
+
+            FileIcon(file = dir, fileType = fileType)
 
             Spacer(modifier = Modifier.width(12.dp))
 
@@ -70,4 +70,30 @@ fun FileItem(
         }
     }
 
+}
+
+@Composable
+private fun FileIcon(file: File, fileType: FileType) {
+
+    when (fileType) {
+        FileType.IMAGE -> {
+            Image(
+                painter = rememberAsyncImagePainter(file),
+                contentDescription = "Miniatura de imagen",
+                modifier = Modifier
+                    .size(48.dp)
+                    .clip(RoundedCornerShape(8.dp)),
+                contentScale = ContentScale.Crop
+            )
+        }
+
+        else -> {
+            Image(
+                painter = painterResource(id = fileType.iconRes),
+                contentDescription = "Ícono de archivo",
+                modifier = Modifier.size(24.dp)
+            )
+        }
+
+    }
 }
