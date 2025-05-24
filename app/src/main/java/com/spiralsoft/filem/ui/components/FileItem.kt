@@ -1,5 +1,6 @@
 package com.spiralsoft.filem.ui.components
 
+import android.content.Context
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -25,10 +26,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import coil3.compose.rememberAsyncImagePainter
 import coil3.request.crossfade
+import coil3.request.error
+import coil3.request.placeholder
+import java.io.File
 import com.spiralsoft.filem.utils.cleanPath
 import com.spiralsoft.filem.constants.FileType
-import com.spiralsoft.filem.utils.FileOpener
-import java.io.File
 
 @Composable
 fun FileItem(
@@ -43,7 +45,7 @@ fun FileItem(
         modifier = modifier
             .fillMaxWidth()
             .clickable {
-                FileOpener.openFile(context, dir)
+                fileType.onClickAction(context, dir)
             },
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         shape = RoundedCornerShape(12.dp)
@@ -53,7 +55,8 @@ fun FileItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            FileIcon(file = dir, fileType = fileType)
+            // Ponerle el icono al tipo de archivo
+            FileIcon(file = dir, fileType = fileType, context = context)
 
             Spacer(modifier = Modifier.width(12.dp))
 
@@ -74,19 +77,20 @@ fun FileItem(
 }
 
 @Composable
-private fun FileIcon(file: File, fileType: FileType) {
+private fun FileIcon(file: File, fileType: FileType, context: Context) {
     when (fileType) {
         FileType.IMAGE -> {
+            // Es una imagen, usa Coil para cargar la miniatura
             val painter = rememberAsyncImagePainter(
-                model = coil3.request.ImageRequest.Builder(LocalContext.current)
-                    .data(file)
-                    .crossfade(true)
-                    //.placeholder() // opcional
-                    //.error(R.drawable.icon_unkdown) // por si falla la carga
-                    .memoryCacheKey(file.absolutePath)
-                    .diskCacheKey(file.absolutePath)
-                    .size(128) // escalar para mejor rendimiento
-                    .build()
+                model =  coil3.request.ImageRequest.Builder(LocalContext.current)
+                    .data(file) // Carga la imagen desde el archivo
+                    .crossfade(true) // Animación de transicion
+                    .placeholder(fileType.iconRes) // Muestra un icono para la carga
+                    .error(fileType.errorIconRes) // Muestra un icono si hay un error
+                    .memoryCacheKey(file.absolutePath) // Establece la clave de caché en el path del archivo
+                    .diskCacheKey(file.absolutePath) // Establece la clave de cache de disco en el path del archivo
+                    .size(128) // Tamaño de la miniatura
+                    .build() // Construye la solicitud
             )
             Image(
                 painter = painter,
@@ -97,6 +101,7 @@ private fun FileIcon(file: File, fileType: FileType) {
                 contentScale = ContentScale.Crop
             )
         } else -> {
+            // Otro tipo de archivo, muestra el icono
             Image(
                 painter = painterResource(id = fileType.iconRes),
                 contentDescription = "Ícono de archivo",
@@ -105,4 +110,5 @@ private fun FileIcon(file: File, fileType: FileType) {
         }
 
     }
+
 }
