@@ -1,18 +1,90 @@
 package com.spiralsoft.filem.constants
 
+import android.content.Context
 import com.spiralsoft.filem.R
 import java.io.File
+import com.spiralsoft.filem.utils.FileOpener
 
-enum class FileType(val iconRes: Int) {
+enum class FileType(
+    val iconRes: Int,
+    val errorIconRes: Int = R.drawable.icon_error,
+    val description: String,
+    val mimeType: String,
+    val onClickAction: ((Context, File) -> Unit)
+) {
 
-    IMAGE(R.drawable.icon_img0),
-    AUDIO(R.drawable.icon_audio0),
-    VIDEO(R.drawable.icon_video0),
-    DOCUMENT(R.drawable.icon_document0),
-    PDF(R.drawable.icon_pdf0),
-    ARCHIVE(R.drawable.icon_archive0),
-    DATAFILE(R.drawable.icon_datafile0),
-    UNKNOWN(R.drawable.icon_unkdown);
+
+    IMAGE(
+        iconRes = R.drawable.icon_img0,
+        description = "Imagenes",
+        mimeType = "image/*",
+        onClickAction = { context, file ->
+            FileOpener.openImage(context, file)
+        }
+    ),
+
+    AUDIO(
+        iconRes = R.drawable.icon_audio0,
+        description = "Audios",
+        mimeType = "audio/*",
+        onClickAction = { context, file ->
+            FileOpener.openAudio(context, file)
+        }
+    ),
+
+    VIDEO(
+        iconRes = R.drawable.icon_video0,
+        description = "Videos",
+        mimeType = "video/*",
+        onClickAction = { context, file ->
+            FileOpener.openVideo(context, file)
+        }
+    ),
+
+    DOCUMENT(
+        iconRes = R.drawable.icon_document0,
+        description = "Documentos",
+        mimeType = "text/*",
+        onClickAction = { context, file ->
+            FileOpener.openText(context, file)
+        }
+    ),
+
+    PDF(
+        iconRes = R.drawable.icon_pdf0,
+        description = "PDF",
+        mimeType = "application/pdf",
+        onClickAction = { context, file ->
+            FileOpener.openPdf(context, file)
+        }
+    ),
+
+    ARCHIVE(
+        iconRes = R.drawable.icon_archive0,
+        description = "Archivos comprimidos",
+        mimeType = "application/zip",
+        onClickAction = { context, file ->
+            FileOpener.openGeneric(context, file)
+        }
+    ),
+
+    DATAFILE(
+        iconRes = R.drawable.icon_datafile0,
+        description = "Archivos de datoss",
+        mimeType = "application/octet-stream",
+        onClickAction = { context, file ->
+            FileOpener.openGeneric(context, file)
+        }
+    ),
+
+    UNKNOWN(
+        iconRes = R.drawable.icon_unkdown,
+        description = "Desconocido",
+        mimeType = "*/*",
+        onClickAction = { context, file ->
+            FileOpener.openGeneric(context, file)
+        }
+    );
 
     companion object {
         fun fromFile(file: File): FileType {
@@ -29,5 +101,4 @@ enum class FileType(val iconRes: Int) {
             }
         }
     }
-
 }
