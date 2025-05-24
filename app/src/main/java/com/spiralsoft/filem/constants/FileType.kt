@@ -1,3 +1,8 @@
+/**
+ * Definido los distintos tipos de archivos para abrirlos con la app correcta,
+ * caracteristicas como los distintos tipos de iconos, indicar que tiene que hacer algo
+ * al hacer click
+ */
 package com.spiralsoft.filem.constants
 
 import android.content.Context
@@ -7,10 +12,10 @@ import com.spiralsoft.filem.R
 import com.spiralsoft.filem.utils.FileOpener
 
 enum class FileType(
-    val iconRes: Int,
-    val errorIconRes: Int = R.drawable.icon_error,
-    val mimeType: String,
-    val onClickAction: ((Context, File) -> Unit)
+    val iconRes: Int, // id del icono
+    val errorIconRes: Int = R.drawable.icon_error, // id del icono de error(igual para todos)
+    val mimeType: String, // tipo de archivo
+    val onClickAction: ((Context, File) -> Unit) // accion a realizar
 ) {
     IMAGE(
         iconRes = R.drawable.icon_img0,
@@ -96,6 +101,10 @@ enum class FileType(
             Toast.makeText(context, "No se puede abrir este tipo de archivo", Toast.LENGTH_SHORT).show()
         }
     );
+
+    // Obtener el tipo de archivo a partir del nombre del archivo
+    // Solo se identifican los listados abajo, los demas se consideran desconocidos
+    // NOTA: Asegurarse de identifcar los mas comunes asi como sus correspondientes categorias
     companion object {
         fun fromFile(file: File): FileType {
             val extension = file.extension.lowercase()
@@ -111,6 +120,7 @@ enum class FileType(
             }
         }
     }
+
 }
 
 /* NOTA: Implementar un codigo como este en el futuro para evitar tanta repeticion
