@@ -8,7 +8,6 @@ import com.spiralsoft.filem.utils.FileOpener
 enum class FileType(
     val iconRes: Int,
     val errorIconRes: Int = R.drawable.icon_error,
-    val description: String,
     val mimeType: String,
     val onClickAction: ((Context, File) -> Unit)
 ) {
@@ -16,7 +15,6 @@ enum class FileType(
 
     IMAGE(
         iconRes = R.drawable.icon_img0,
-        description = "Imagenes",
         mimeType = "image/*",
         onClickAction = { context, file ->
             FileOpener.openImage(context, file)
@@ -25,7 +23,6 @@ enum class FileType(
 
     AUDIO(
         iconRes = R.drawable.icon_audio0,
-        description = "Audios",
         mimeType = "audio/*",
         onClickAction = { context, file ->
             FileOpener.openAudio(context, file)
@@ -34,7 +31,6 @@ enum class FileType(
 
     VIDEO(
         iconRes = R.drawable.icon_video0,
-        description = "Videos",
         mimeType = "video/*",
         onClickAction = { context, file ->
             FileOpener.openVideo(context, file)
@@ -43,7 +39,6 @@ enum class FileType(
 
     DOCUMENT(
         iconRes = R.drawable.icon_document0,
-        description = "Documentos",
         mimeType = "text/*",
         onClickAction = { context, file ->
             FileOpener.openText(context, file)
@@ -52,7 +47,6 @@ enum class FileType(
 
     PDF(
         iconRes = R.drawable.icon_pdf0,
-        description = "PDF",
         mimeType = "application/pdf",
         onClickAction = { context, file ->
             FileOpener.openPdf(context, file)
@@ -61,7 +55,6 @@ enum class FileType(
 
     ARCHIVE(
         iconRes = R.drawable.icon_archive0,
-        description = "Archivos comprimidos",
         mimeType = "application/zip",
         onClickAction = { context, file ->
             FileOpener.openGeneric(context, file)
@@ -70,7 +63,6 @@ enum class FileType(
 
     DATAFILE(
         iconRes = R.drawable.icon_datafile0,
-        description = "Archivos de datoss",
         mimeType = "application/octet-stream",
         onClickAction = { context, file ->
             FileOpener.openGeneric(context, file)
@@ -79,7 +71,6 @@ enum class FileType(
 
     UNKNOWN(
         iconRes = R.drawable.icon_unkdown,
-        description = "Desconocido",
         mimeType = "*/*",
         onClickAction = { context, file ->
             FileOpener.openGeneric(context, file)
