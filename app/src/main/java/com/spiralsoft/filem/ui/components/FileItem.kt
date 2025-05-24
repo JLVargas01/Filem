@@ -1,6 +1,5 @@
 package com.spiralsoft.filem.ui.components
 
-import android.content.Context
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -56,7 +55,7 @@ fun FileItem(
         ) {
 
             // Ponerle el icono al tipo de archivo
-            FileIcon(file = dir, fileType = fileType, context = context)
+            FileIcon(file = dir, fileType = fileType)
 
             Spacer(modifier = Modifier.width(12.dp))
 
@@ -77,7 +76,7 @@ fun FileItem(
 }
 
 @Composable
-private fun FileIcon(file: File, fileType: FileType, context: Context) {
+private fun FileIcon(file: File, fileType: FileType) {
     when (fileType) {
         FileType.IMAGE -> {
             // Es una imagen, usa Coil para cargar la miniatura
