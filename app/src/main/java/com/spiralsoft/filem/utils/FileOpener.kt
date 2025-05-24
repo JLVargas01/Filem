@@ -26,12 +26,12 @@ object FileOpener {
         openFileWithMime(context, file, "application/pdf")
     }
 
-    fun openText(context: Context, file: File) {
-        openFileWithMime(context, file, "text/plain")
+    fun openCompressed(context: Context, file: File) {
+        openFileWithMime(context, file, "application/zip")
     }
 
-    fun openGeneric(context: Context, file: File) {
-        openFileWithMime(context, file, "*/*")
+    fun openText(context: Context, file: File) {
+        openFileWithMime(context, file, "text/plain")
     }
 
     fun canOpenFile(context: Context, file: File, mimeType: String): Boolean {
@@ -40,16 +40,12 @@ object FileOpener {
             "${context.packageName}.provider",
             file
         )
-
         val intent = Intent(Intent.ACTION_VIEW).apply {
             setDataAndType(uri, mimeType)
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
-
-        // Busca actividades que puedan manejar el intent
         val packageManager = context.packageManager
         val resolveInfoList = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
-
         return resolveInfoList.isNotEmpty()
     }
 
@@ -60,18 +56,15 @@ object FileOpener {
                 "${context.packageName}.provider",
                 file
             )
-
             val intent = Intent(Intent.ACTION_VIEW).apply {
                 setDataAndType(uri, mimeType)
                 flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_NEW_TASK
             }
-
-            context.startActivity(intent)
-
+            context.startActivity(Intent.createChooser(intent, "Abrir con:"))
         } catch (e: Exception) {
             e.printStackTrace()
             Toast.makeText(context, "No se pudo abrir el archivo", Toast.LENGTH_SHORT).show()
         }
     }
-}
 
+}
