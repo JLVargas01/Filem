@@ -1,3 +1,8 @@
+/**
+ * Representa un directorio(DirectoryItem), con sus caracteristicas y la accion que puede realizar
+ * Las caracteristicas son: icono, nombre, ruta, tamaño y la accion de navegacion hacia el contenido
+ * de ese directorio
+ */
 package com.spiralsoft.filem.ui.components
 
 import androidx.compose.foundation.clickable

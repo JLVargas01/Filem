@@ -1,7 +1,6 @@
 /**
  * Definido los distintos tipos de archivos para abrirlos con la app correcta,
- * caracteristicas como los distintos tipos de iconos, indicar que tiene que hacer algo
- * al hacer click
+ * caracteristicas iconos dependiendo del tipo, y la accion a realizar al hacer click
  */
 package com.spiralsoft.filem.constants
 
@@ -22,7 +21,7 @@ enum class FileType(
         mimeType = "image/*",
         onClickAction = { context, file ->
             if (FileOpener.canOpenFile(context, file, "video/*")) {
-                FileOpener.openVideo(context, file)
+                FileOpener.openImage(context, file)
             } else {
                 Toast.makeText(context, "No hay aplicaciones disponibles para abrir este archivo", Toast.LENGTH_SHORT).show()
             }

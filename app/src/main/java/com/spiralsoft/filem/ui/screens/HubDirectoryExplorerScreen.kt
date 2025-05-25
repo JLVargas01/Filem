@@ -1,6 +1,6 @@
-/*
-* Esta es la pantalla hub del explorador de archivos
-* Se muestra cuando se esta en la carpeta raiz  "/"
+/**
+ * Pantalla principal
+ * solamente muestra el contenido de la carpeta raiz "/"
  */
 
 package com.spiralsoft.filem.ui.screens

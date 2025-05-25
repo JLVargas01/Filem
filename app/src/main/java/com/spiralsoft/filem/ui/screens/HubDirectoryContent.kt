@@ -1,3 +1,7 @@
+/**
+ * Contenido de la pantalla principal
+ * solo lista y muestra el contenido de la carpeta raiz "/"
+ */
 package com.spiralsoft.filem.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement

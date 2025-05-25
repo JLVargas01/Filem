@@ -1,3 +1,7 @@
+/**
+ * Representa la pantalla con la lista de directorios y archivos,
+ * simpere se utiliza para mostrar los que no esta en el rootPath
+ */
 package com.spiralsoft.filem.ui.screens
 
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,7 +26,7 @@ import com.spiralsoft.filem.viewmodel.DirectoryExplorerViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DirectoryExplorerScreen(
-    initialPath: String, // Ruta inicial
+    initialPath: String, // Ruta de directorio del que mostrar el contenido
     onNavigateBack: () -> Unit, // ViewModel de la pantalla
     viewModel: DirectoryExplorerViewModel = viewModel() // ViewModel de la pantalla
 ) {

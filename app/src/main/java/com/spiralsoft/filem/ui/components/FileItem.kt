@@ -1,3 +1,8 @@
+/**
+ * Representa un archivo(FileItem), con sus caracteristicas y las acciones que puede realizar
+ * Las caracteristicas son: el icon(depende de su tipo), nombre, ruta, tamaño, y la posibilidad
+ * de realizar alguna accion al hacer click(La accion aqui no esta definida)
+ */
 package com.spiralsoft.filem.ui.components
 
 import androidx.compose.foundation.clickable
@@ -75,6 +80,7 @@ fun FileItem(
 
 }
 
+//NOTA: Organizar mejor esta funcion y colocarla en un mejor lugar
 @Composable
 private fun FileIcon(file: File, fileType: FileType) {
     when (fileType) {

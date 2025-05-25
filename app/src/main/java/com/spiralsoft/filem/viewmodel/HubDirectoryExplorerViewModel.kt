@@ -1,3 +1,6 @@
+/**
+ * ViewModel para la pantalla principal de explorador de directorios
+ */
 package com.spiralsoft.filem.viewmodel
 
 import androidx.lifecycle.ViewModel

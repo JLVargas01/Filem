@@ -1,3 +1,6 @@
+/**
+ * Utils para verificar y solicitar permisos
+ */
 package com.spiralsoft.filem.utils
 
 import android.Manifest

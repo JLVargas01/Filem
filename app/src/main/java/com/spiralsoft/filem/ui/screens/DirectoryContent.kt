@@ -1,3 +1,7 @@
+/**
+ * Representa el listado de los directorios y archivos,
+ * solo se utiliza para mostrar y listar el contenido que no esta en el rootPath
+ */
 package com.spiralsoft.filem.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement

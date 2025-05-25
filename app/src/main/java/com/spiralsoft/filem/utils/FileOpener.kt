@@ -1,3 +1,6 @@
+/**
+ * Utils para abrir archivos en aplicaciones que soporte cada tipo de archivo
+ */
 package com.spiralsoft.filem.utils
 
 import android.content.Context
@@ -10,30 +13,42 @@ import java.io.File
 
 object FileOpener {
 
+    // Abrir imagenes en apps que lo soporten
     fun openImage(context: Context, file: File) {
         openFileWithMime(context, file, "image/*")
     }
 
+    // Abrir archivos de audio en apps que lo soporten
     fun openAudio(context: Context, file: File) {
         openFileWithMime(context, file, "audio/*")
     }
 
+    // Abrir archivos de video en apps que lo soporten
     fun openVideo(context: Context, file: File) {
         openFileWithMime(context, file, "video/*")
     }
 
+    // Abrir archivos pdf en apps que lo soporten
     fun openPdf(context: Context, file: File) {
         openFileWithMime(context, file, "application/pdf")
     }
 
+    // Abrir archivos de excel en apps que lo soporten
+    fun openExcel(context: Context, file: File) {
+        openFileWithMime(context, file, "application/vnd.ms-excel")
+    }
+
+    // Abrir archivos comprimidos
     fun openCompressed(context: Context, file: File) {
         openFileWithMime(context, file, "application/zip")
     }
 
+    // Abrir archivos de texto en apps que lo soporten
     fun openText(context: Context, file: File) {
         openFileWithMime(context, file, "text/plain")
     }
 
+    // Verificar si existe una app que pueda abrir el archivo
     fun canOpenFile(context: Context, file: File, mimeType: String): Boolean {
         val uri = FileProvider.getUriForFile(
             context,
@@ -49,6 +64,7 @@ object FileOpener {
         return resolveInfoList.isNotEmpty()
     }
 
+    // Abrir archivos con un intent
     private fun openFileWithMime(context: Context, file: File, mimeType: String) {
         try {
             val uri: Uri = FileProvider.getUriForFile(

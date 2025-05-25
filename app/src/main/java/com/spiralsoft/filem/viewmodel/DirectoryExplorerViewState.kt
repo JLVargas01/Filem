@@ -1,3 +1,6 @@
+/**
+ * State para la pantalla de explorador de directorios
+ */
 package com.spiralsoft.filem.viewmodel
 
 import java.io.File
