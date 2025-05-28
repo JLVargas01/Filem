@@ -1,4 +1,4 @@
-package com.spiralsoft.filem
+package com.spiralsoft.filem.navigation
 
 import android.net.Uri
 import android.os.Environment

@@ -1,7 +1,7 @@
 /**
  * Manejo de navegación de la aplicación
  */
-package com.spiralsoft.filem
+package com.spiralsoft.filem.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
