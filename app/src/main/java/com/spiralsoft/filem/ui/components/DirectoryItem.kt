@@ -18,12 +18,14 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.width
 import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
 import com.spiralsoft.filem.utils.cleanPath
 import com.spiralsoft.filem.R
 import java.io.File
@@ -42,13 +44,20 @@ fun DirectoryItem(
             modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.icon_folder0),
-                contentDescription = "Ícono de carpeta",
-                modifier = Modifier.size(24.dp)
+            Box(
+                modifier = Modifier.size(48.dp)
+                    .clip(RoundedCornerShape(8.dp)),
+                contentAlignment = Alignment.Center,
+                content = {
+                    Image(
+                        painter = painterResource(id = R.drawable.icon_folder0),
+                        contentDescription = "Ícono de carpeta",
+                        modifier = Modifier.size(32.dp)
+                    )
+                }
             )
 
-            Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = Modifier.width(6.dp))
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
@@ -61,6 +70,19 @@ fun DirectoryItem(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
+
+            Box(
+                modifier = Modifier.size(24.dp),
+                contentAlignment = Alignment.CenterEnd,
+                content = {
+                    Image(
+                        painter = painterResource(id = R.drawable.arrow_forward0),
+                        modifier = Modifier.size(16.dp),
+                        contentDescription = "Navegar"
+                    )
+                }
+            )
+
         }
     }
 
