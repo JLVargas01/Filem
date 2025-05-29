@@ -23,7 +23,7 @@ class HubDirectoryExplorerViewModel : ViewModel() {
     }
 
     // Carga de directorios y archivos en root
-    private fun loadPath() {
+    fun loadPath() {
         viewModelScope.launch(Dispatchers.IO) {
 
             _state.value = _state.value.copy(isLoading = false)
@@ -57,6 +57,19 @@ class HubDirectoryExplorerViewModel : ViewModel() {
                 isLoading = false
             )
 
+        }
+    }
+
+    // Crear un nuevo directorio en root
+    fun createDirectory(newDirName: String): Boolean {
+        val parentDir = Environment.getExternalStorageDirectory()
+        val newDir = File(parentDir, newDirName)
+        return if (!newDir.exists()) {
+            // No existe el directorio, crear uno nuevo
+            newDir.mkdirs()
+        } else {
+            // Ya existe el directorio
+            false
         }
     }
 
