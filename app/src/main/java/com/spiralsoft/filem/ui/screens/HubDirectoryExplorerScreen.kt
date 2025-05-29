@@ -5,18 +5,29 @@
 
 package com.spiralsoft.filem.ui.screens
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import com.spiralsoft.filem.ui.components.CreateDirectoryDialog
 import com.spiralsoft.filem.viewmodel.HubDirectoryExplorerViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -27,10 +38,40 @@ fun HubFileExplorerScreen(
 ) {
 
     val state by viewModel.state.collectAsState() // Estado de la pantalla
+    var showDialog by remember { mutableStateOf(false) }
+
+    if (showDialog) {
+        CreateDirectoryDialog(
+            onConfirm = { folderName ->
+                val isCreated = viewModel.createDirectory(folderName)
+                if (isCreated) {
+                    viewModel.loadPath() // Recargar el contenido del directorio
+                }
+                showDialog = false
+            },
+            onDismiss = { showDialog = false }
+        )
+    }
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Filem - Inicio") })
+            TopAppBar(title = { Text("Filem - Inicio") },
+                actions = {
+                    Box(
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clickable { showDialog = true },
+                        contentAlignment = Alignment.CenterEnd,
+                        content = {
+                            Icon(
+                                Icons.Default.AddCircle,
+                                contentDescription = "Más opciones",
+                                modifier = Modifier.size(32.dp)
+                            )
+                        }
+                    )
+                }
+            )
         }
     ) { innerPadding ->
         // Contenido de la pantalla
