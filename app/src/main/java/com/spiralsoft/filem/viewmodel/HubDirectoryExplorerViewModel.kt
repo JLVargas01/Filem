@@ -11,11 +11,14 @@ import kotlinx.coroutines.Dispatchers
 import androidx.lifecycle.viewModelScope
 import java.io.File
 import android.os.Environment
+import com.spiralsoft.filem.LocalManager
 
 class HubDirectoryExplorerViewModel : ViewModel() {
 
     private val _state = MutableStateFlow(HubDirectoryExplorerState()) // Estado de la pantalla privado
     val state: StateFlow<HubDirectoryExplorerState> get() = _state  // Estado de la pantalla público
+    private val internalStorage: File = Environment.getExternalStorageDirectory() // File de root
+    private val fileManager: LocalManager = LocalManager(internalStorage) // Manager de archivos
 
     // Cargar directorios al iniciar la pantalla
     init {
@@ -23,7 +26,7 @@ class HubDirectoryExplorerViewModel : ViewModel() {
     }
 
     // Carga de directorios y archivos en root
-    fun loadPath() {
+    private fun loadPath() {
         viewModelScope.launch(Dispatchers.IO) {
 
             _state.value = _state.value.copy(isLoading = false)
@@ -32,23 +35,10 @@ class HubDirectoryExplorerViewModel : ViewModel() {
             val rootFiles = mutableListOf<File>() // LIsta de archivos de root
 
             // Buscar el contenido del almacenamiento interno
-            val internalStorage = Environment.getExternalStorageDirectory()
             if (internalStorage.exists() && internalStorage.canRead()) {
-                val subDirs = internalStorage.listFiles()?.filter {
-                    it.isDirectory && it.canRead() && !it.isHidden
-                }.orEmpty()
-                val subFiles = internalStorage.listFiles()?.filter {
-                    it.isFile && it.canRead() && !it.isHidden
-                }.orEmpty()
-                rootDirectories.addAll(subDirs)
-                rootFiles.addAll(subFiles)
+                rootDirectories.addAll(fileManager.getDirectories(internalStorage))
+                rootFiles.addAll(fileManager.getFilesInDirectory(internalStorage))
             }
-
-            // Buscar el contenido del almacenamiento externo
-            // NOTA: Aun no se hace nada si es que existe
-            val externalDirs = File("/storage").listFiles()?.filter {
-                it.exists() && it.canRead() && it.isDirectory && it != internalStorage
-            }.orEmpty()
 
             // Actualizar el estado de la pantalla
             _state.value = _state.value.copy(
@@ -56,21 +46,52 @@ class HubDirectoryExplorerViewModel : ViewModel() {
                 files = rootFiles,
                 isLoading = false
             )
-
         }
     }
 
-    // Crear un nuevo directorio en root
-    fun createDirectory(newDirName: String): Boolean {
-        val parentDir = Environment.getExternalStorageDirectory()
-        val newDir = File(parentDir, newDirName)
-        return if (!newDir.exists()) {
-            // No existe el directorio, crear uno nuevo
-            newDir.mkdirs()
+    fun toggleSelection(file: File) {
+        val current = _state.value.selectedItems.toMutableSet()
+        if (current.contains(file)) {
+            current.remove(file)
         } else {
-            // Ya existe el directorio
-            false
+            current.add(file)
         }
+        _state.value = _state.value.copy(selectedItems = current)
+    }
+
+    fun clearSelection() {
+        _state.value = _state.value.copy(selectedItems = emptySet())
+    }
+
+    // Crear un nuevo directorio en root y recargar el contenido
+    fun createDirAndReload(newDirName: String): Boolean {
+        if (fileManager.createDirectory(newDirName)) {
+            loadPath()
+            return true
+        }
+        return false
+    }
+
+    fun deleteDirAndReload(dirDelete: File): Boolean {
+        if (fileManager.deleteDirectory(dirDelete)) {
+            loadPath()
+            return true
+        }
+        return false
+    }
+
+    fun deleteSelectedAndReload() {
+        val toDelete = _state.value.selectedItems
+        toDelete.forEach { fileManager.deleteDirectory(it) } // Solo directorios por ahora
+        clearSelection()
+        loadPath()
+    }
+
+    fun deleteSelectedItems() {
+        val selected = _state.value.selectedItems
+        selected.forEach { fileManager.deleteDirectory(it) }
+        _state.value = _state.value.copy(selectedItems = emptySet())
+        loadPath()
     }
 
 }
