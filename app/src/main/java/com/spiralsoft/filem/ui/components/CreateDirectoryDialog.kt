@@ -16,10 +16,11 @@ fun CreateDirectoryDialog(
     onDismiss: () -> Unit
 ) {
 
-    var text by remember { mutableStateOf("Lipsa") }
+    var text by remember { mutableStateOf("") }
 
     AlertDialog(
         onDismissRequest = onDismiss,
+        title = { Text("Nueva Carpeta") },
         confirmButton = {
             TextButton(onClick = {
                 if (text.isNotBlank()) onConfirm(text.trim())
@@ -32,7 +33,6 @@ fun CreateDirectoryDialog(
                 Text("Cancelar")
             }
         },
-        title = { Text("Nueva Carpeta") },
         text = {
             OutlinedTextField(
                 value = text,
