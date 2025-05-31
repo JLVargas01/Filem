@@ -60,9 +60,8 @@ fun DirectoryExplorerScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
                 .padding(16.dp),
-            onNavigateTo = { path ->
-                viewModel.navigateTo(path)
-            }
+            onNavigateTo = { path -> viewModel.navigateTo(path) },
+            toggleSelection = { file -> viewModel.toggleSelection(file) },
         )
 
     }
