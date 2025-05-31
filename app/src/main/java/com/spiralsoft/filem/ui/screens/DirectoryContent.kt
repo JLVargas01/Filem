@@ -4,25 +4,21 @@
  */
 package com.spiralsoft.filem.ui.screens
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.Alignment
-import com.spiralsoft.filem.ui.components.DirectoryItem
-import com.spiralsoft.filem.ui.components.FileItem
 import com.spiralsoft.filem.viewmodel.DirectoryExplorerViewState
+import java.io.File
 
 @Composable
 fun DirectoryContent(
     state: DirectoryExplorerViewState, // Estado de la pantalla
     modifier: Modifier = Modifier, // Modificador para personalizar la apariencia
-    onNavigateTo: (String) -> Unit // Función para navegar a una ruta
+    onNavigateTo: (String) -> Unit, // Función para navegar a una ruta
+    toggleSelection: (File) -> Unit // Función para seleccionar un elemento
 ) {
     when {
 
@@ -42,30 +38,13 @@ fun DirectoryContent(
 
         // Mostrar el contenido de la lista de directorios
         else -> {
-            LazyColumn(
-                modifier = modifier,
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                // Item para directorios
-                items(
-                    items = state.directories,
-                    key = { it.absolutePath }
-                ) { dir ->
-                    DirectoryItem(
-                        dir = dir,
-                        onClick = { onNavigateTo(dir.absolutePath) }
-                    )
-                }
-                // Item de archivo
-                items(
-                    items = state.files,
-                    key = { it.absolutePath }
-                ) { file ->
-                    FileItem(
-                        dir = file
-                    )
-                }
-            }
+            FileListContent(
+                directories = state.directories,
+                files = state.files,
+                selectedItems = state.selectedItems,
+                onNavigateTo = onNavigateTo,
+                toggleSelection = toggleSelection
+            )
         }
 
     }
