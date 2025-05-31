@@ -77,4 +77,14 @@ class DirectoryExplorerViewModel : ViewModel() {
         return true
     }
 
+    fun toggleSelection(file: File) {
+        val current = _state.value.selectedItems.toMutableSet()
+        if (current.contains(file)) {
+            current.remove(file)
+        } else {
+            current.add(file)
+        }
+        _state.value = _state.value.copy(selectedItems = current)
+    }
+
 }
