@@ -27,6 +27,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import com.spiralsoft.filem.ui.components.BottomActionBar
+import com.spiralsoft.filem.ui.components.ConfirmDeleteDialog
 import com.spiralsoft.filem.ui.components.CreateDirectoryDialog
 import com.spiralsoft.filem.viewmodel.HubDirectoryExplorerViewModel
 
@@ -39,14 +41,22 @@ fun HubFileExplorerScreen(
 
     val state by viewModel.state.collectAsState() // Estado de la pantalla
     var showDialog by remember { mutableStateOf(false) }
+    var showDeleteDialog by remember { mutableStateOf(false) }
+
+    if (showDeleteDialog) {
+        ConfirmDeleteDialog(
+            onConfirm = {
+                viewModel.deleteSelectedItems()
+                showDeleteDialog = false
+            },
+            onDismiss = { showDeleteDialog = false }
+        )
+    }
 
     if (showDialog) {
         CreateDirectoryDialog(
             onConfirm = { folderName ->
-                val isCreated = viewModel.createDirectory(folderName)
-                if (isCreated) {
-                    viewModel.loadPath() // Recargar el contenido del directorio
-                }
+                viewModel.createDirAndReload(folderName)
                 showDialog = false
             },
             onDismiss = { showDialog = false }
@@ -57,6 +67,7 @@ fun HubFileExplorerScreen(
         topBar = {
             TopAppBar(title = { Text("Filem - Inicio") },
                 actions = {
+                    // Boton para crear un nuevo directorio
                     Box(
                         modifier = Modifier
                             .size(24.dp)
@@ -72,6 +83,12 @@ fun HubFileExplorerScreen(
                     )
                 }
             )
+        },
+        bottomBar = {
+            BottomActionBar(
+                visible = state.selectedItems.isNotEmpty(),
+                onDeleteClick = { showDeleteDialog = true }
+            )
         }
     ) { innerPadding ->
         // Contenido de la pantalla
@@ -81,7 +98,11 @@ fun HubFileExplorerScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
                 .padding(16.dp),
-            onNavigateTo = onNavigateToFile
+            onNavigateTo = onNavigateToFile,
+            toggleSelection = { file -> viewModel.toggleSelection(file) }
+            // Equivalente a "viewModel::toggleSelection", se puede cambiar
         )
+
     }
+
 }
