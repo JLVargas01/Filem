@@ -8,7 +8,7 @@ import android.content.Context
 import android.widget.Toast
 import java.io.File
 import com.spiralsoft.filem.R
-import com.spiralsoft.filem.utils.FileOpener
+import com.spiralsoft.filem.domain.utils.FileOpener
 
 enum class FileType(
     val iconRes: Int, // id del icono

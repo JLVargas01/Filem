@@ -25,9 +25,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import android.widget.Toast
-import com.spiralsoft.filem.navigation.AppNavHost
-import com.spiralsoft.filem.ui.theme.FilemTheme
-import com.spiralsoft.filem.utils.PermissionUtils
+import com.spiralsoft.filem.presentation.navigation.AppNavHost
+import com.spiralsoft.filem.domain.utils.PermissionUtils
 
 class MainActivity : ComponentActivity() {
 
@@ -35,9 +34,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         requestStoragePermissions()
         setContent {
-            FilemTheme {
-                AppNavHost()
-            }
+            AppNavHost()
         }
     }
 
