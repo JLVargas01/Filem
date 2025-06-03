@@ -3,12 +3,13 @@
  */
 package com.spiralsoft.filem.presentation.screen.directory
 
+import com.spiralsoft.filem.domain.repository.DirectoryViewState
 import java.io.File
 
 data class DirectoryExplorerViewState(
-    val files: List<File> = emptyList(), // Lista de archivos disponibles
-    val directories: List<File> = emptyList(), // Lista de directorios disponibles
-    val isLoading: Boolean = false, // Estado de carga
-    val selectedItems: Set<File> = emptySet(), // Lista de elementos seleccionados
+    override val files: List<File> = emptyList(), // Lista de archivos disponibles
+    override val directories: List<File> = emptyList(), // Lista de directorios disponibles
+    override val isLoading: Boolean = false, // Estado de carga
+    override val selectedItems: Set<File> = emptySet(), // Lista de elementos seleccionados
     val currentPath: String // Ruta actual
-)
+) : DirectoryViewState
