@@ -5,6 +5,10 @@
 
 package com.spiralsoft.filem.presentation.screen.hub
 
+import com.spiralsoft.filem.presentation.components.BottomActionBar
+import com.spiralsoft.filem.presentation.components.ConfirmDeleteDialog
+import com.spiralsoft.filem.presentation.components.CreateDirectoryDialog
+import com.spiralsoft.filem.presentation.components.DirectoryContent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,9 +31,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.spiralsoft.filem.presentation.components.BottomActionBar
-import com.spiralsoft.filem.presentation.components.ConfirmDeleteDialog
-import com.spiralsoft.filem.presentation.components.CreateDirectoryDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -91,7 +92,7 @@ fun HubFileExplorerScreen(
         }
     ) { innerPadding ->
         // Contenido de la pantalla
-        HubContent(
+        DirectoryContent(
             state = state,
             modifier = Modifier
                 .fillMaxSize()
