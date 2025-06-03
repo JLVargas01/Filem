@@ -1,9 +1,10 @@
 /**
- * Representa la pantalla con la lista de directorios y archivos,
+ * Pantalla con la lista de directorios y archivos,
  * simpere se utiliza para mostrar los que no esta en el rootPath
  */
 package com.spiralsoft.filem.presentation.screen.directory
 
+import com.spiralsoft.filem.presentation.components.DirectoryContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
