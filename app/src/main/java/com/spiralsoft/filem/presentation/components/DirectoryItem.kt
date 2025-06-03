@@ -5,6 +5,13 @@
  */
 package com.spiralsoft.filem.presentation.components
 
+import com.spiralsoft.filem.R
+import com.spiralsoft.filem.domain.utils.cleanPath
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -17,7 +24,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.width
@@ -26,10 +32,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.combinedClickable
-import com.spiralsoft.filem.domain.utils.cleanPath
-import com.spiralsoft.filem.R
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material3.Icon
 import java.io.File
 
 @Composable
@@ -42,13 +48,6 @@ fun DirectoryItem(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .background(
-                if (isSelected) {
-                    MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
-                } else {
-                    Color.Transparent
-                }
-            )
             .combinedClickable(
                 onClick = onClick,
                 onLongClick = onLongClick
@@ -60,8 +59,9 @@ fun DirectoryItem(
             modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            // Ícono de carpeta
             Box(
-                modifier = Modifier.size(48.dp)
+                modifier = Modifier
                     .clip(RoundedCornerShape(8.dp)),
                 contentAlignment = Alignment.Center,
                 content = {
@@ -74,7 +74,7 @@ fun DirectoryItem(
             )
 
             Spacer(modifier = Modifier.width(6.dp))
-
+            // Información del directorio
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = dir.name.ifBlank { dir.absolutePath.cleanPath() },
@@ -98,6 +98,18 @@ fun DirectoryItem(
                     )
                 }
             )
+            // Check de selección
+            AnimatedVisibility(
+                visible = isSelected,
+                enter = fadeIn() + scaleIn(),
+                exit = fadeOut() + scaleOut()
+            ) {
+                Icon(
+                    imageVector = Icons.Default.CheckCircle,
+                    contentDescription = "Seleccionado",
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            }
 
         }
     }
