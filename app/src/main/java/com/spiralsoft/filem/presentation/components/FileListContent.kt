@@ -33,7 +33,15 @@ fun FileListContent(
             )
         }
         items(files) { file ->
-            FileItem(dir = file)
+            FileItem(
+                file = file,
+                isSelected = selectedItems.contains(file),
+                onClick = {
+                    if (selectedItems.isNotEmpty()) toggleSelection(file)
+                    else onNavigateTo(file.absolutePath)
+                },
+                onLongClick = { toggleSelection(file) },
+            )
         }
     }
 }
