@@ -7,11 +7,6 @@ package com.spiralsoft.filem.presentation.components
 
 import com.spiralsoft.filem.R
 import com.spiralsoft.filem.domain.utils.cleanPath
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -33,9 +28,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material3.Icon
 import java.io.File
 
 @Composable
@@ -60,23 +52,7 @@ fun DirectoryItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             // Check de selección
-            AnimatedVisibility(
-                visible = isSelected,
-                enter = fadeIn() + scaleIn(),
-                exit = fadeOut() + scaleOut()
-            ) {
-                Box(
-                    modifier = Modifier.size(12.dp),
-                    contentAlignment = Alignment.CenterStart,
-                    content = {
-                        Icon(
-                            imageVector = Icons.Default.CheckCircle,
-                            contentDescription = "Seleccionado",
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                    }
-                )
-            }
+            AnimatedCheck(isSelected)
             // Ícono de carpeta
             Box(
                 modifier = Modifier
