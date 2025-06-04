@@ -5,18 +5,26 @@
  */
 package com.spiralsoft.filem.presentation.components
 
-import androidx.compose.foundation.clickable
+import com.spiralsoft.filem.domain.utils.cleanPath
+import com.spiralsoft.filem.constants.FileType
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -37,24 +45,24 @@ import coil3.request.crossfade
 import coil3.request.error
 import coil3.request.placeholder
 import java.io.File
-import com.spiralsoft.filem.domain.utils.cleanPath
-import com.spiralsoft.filem.constants.FileType
 
 @Composable
 fun FileItem(
-    dir: File,
-    modifier: Modifier = Modifier
+    file: File,
+    isSelected: Boolean,
+    onClick: () -> Unit,
+    onLongClick: () -> Unit
 ) {
 
-    val context = LocalContext.current
-    val fileType = remember(dir) { FileType.fromFile(dir) }
+    val fileType = remember(file) { FileType.fromFile(file) }
 
     Card(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
-            .clickable {
-                fileType.onClickAction(context, dir)
-            },
+            .combinedClickable(
+                onClick = onClick,
+                onLongClick = onLongClick
+        ),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         shape = RoundedCornerShape(12.dp)
     ) {
@@ -62,14 +70,33 @@ fun FileItem(
             modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-
+            // Check de selección
+            AnimatedVisibility(
+                visible = isSelected,
+                enter = fadeIn() + scaleIn(),
+                exit = fadeOut() + scaleOut()
+            ) {
+                Box(
+                    modifier = Modifier.size(12.dp),
+                    contentAlignment = Alignment.CenterStart,
+                    content = {
+                        Icon(
+                            imageVector = Icons.Default.CheckCircle,
+                            contentDescription = "Seleccionado",
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                )
+            }
+            // Ícono de carpeta
             Box(
-                modifier = Modifier.size(48.dp)
+                modifier = Modifier
+                    .size(48.dp)
                     .clip(RoundedCornerShape(8.dp)),
                 contentAlignment = Alignment.Center,
                 content = {
                     // Ponerle el icono al tipo de archivo
-                    FileIcon(file = dir, fileType = fileType)
+                    FileIcon(file = file, fileType = fileType)
                 }
             )
 
@@ -77,11 +104,11 @@ fun FileItem(
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = dir.name.ifBlank { dir.absolutePath.cleanPath() },
+                    text = file.name.ifBlank { file.absolutePath.cleanPath() },
                     style = MaterialTheme.typography.titleMedium
                 )
                 Text(
-                    text = dir.absolutePath.cleanPath(),
+                    text = file.absolutePath.cleanPath(),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

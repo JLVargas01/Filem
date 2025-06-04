@@ -51,7 +51,7 @@ fun DirectoryItem(
             .combinedClickable(
                 onClick = onClick,
                 onLongClick = onLongClick
-            ),
+        ),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         shape = RoundedCornerShape(12.dp)
     ) {
@@ -59,9 +59,28 @@ fun DirectoryItem(
             modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            // Check de selección
+            AnimatedVisibility(
+                visible = isSelected,
+                enter = fadeIn() + scaleIn(),
+                exit = fadeOut() + scaleOut()
+            ) {
+                Box(
+                    modifier = Modifier.size(12.dp),
+                    contentAlignment = Alignment.CenterStart,
+                    content = {
+                        Icon(
+                            imageVector = Icons.Default.CheckCircle,
+                            contentDescription = "Seleccionado",
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                )
+            }
             // Ícono de carpeta
             Box(
                 modifier = Modifier
+                    .size(48.dp)
                     .clip(RoundedCornerShape(8.dp)),
                 contentAlignment = Alignment.Center,
                 content = {
@@ -98,18 +117,6 @@ fun DirectoryItem(
                     )
                 }
             )
-            // Check de selección
-            AnimatedVisibility(
-                visible = isSelected,
-                enter = fadeIn() + scaleIn(),
-                exit = fadeOut() + scaleOut()
-            ) {
-                Icon(
-                    imageVector = Icons.Default.CheckCircle,
-                    contentDescription = "Seleccionado",
-                    tint = MaterialTheme.colorScheme.primary
-                )
-            }
 
         }
     }
