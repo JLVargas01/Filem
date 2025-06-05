@@ -31,12 +31,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import java.nio.file.Path
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HubFileExplorerScreen(
     viewModel: HubDirectoryExplorerViewModel = viewModel(), // ViewModel de la pantalla
-    onNavigateToFile: (String) -> Unit // Función para navegar a una ruta
+    onNavigateToFile: (Path) -> Unit // Función para navegar a una ruta
 ) {
 
     val state by viewModel.state.collectAsState() // Estado de la pantalla
@@ -46,7 +47,7 @@ fun HubFileExplorerScreen(
     if (showDeleteDialog) {
         ConfirmDeleteDialog(
             onConfirm = {
-                viewModel.deleteSelectedItems()
+                viewModel.deleteSelectedItemsAndReload()
                 showDeleteDialog = false
             },
             onDismiss = { showDeleteDialog = false }
@@ -99,7 +100,7 @@ fun HubFileExplorerScreen(
                 .padding(innerPadding)
                 .padding(16.dp),
             onNavigateTo = onNavigateToFile,
-            toggleSelection = { file -> viewModel.toggleSelection(file) }
+            toggleSelection = { itemPath -> viewModel.toggleSelection(itemPath) }
             // Equivalente a "viewModel::toggleSelection", se puede cambiar
         )
 

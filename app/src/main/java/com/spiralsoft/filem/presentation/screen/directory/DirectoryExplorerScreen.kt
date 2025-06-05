@@ -22,11 +22,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import java.nio.file.Path
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DirectoryExplorerScreen(
-    initialPath: String, // Ruta de directorio del que mostrar el contenido
+    initialPath: Path, // Ruta de directorio del que mostrar el contenido
     onNavigateBack: () -> Unit, // ViewModel de la pantalla
     viewModel: DirectoryExplorerViewModel = viewModel() // ViewModel de la pantalla
 ) {
@@ -61,7 +62,7 @@ fun DirectoryExplorerScreen(
                 .padding(innerPadding)
                 .padding(16.dp),
             onNavigateTo = { path -> viewModel.navigateTo(path) },
-            toggleSelection = { file -> viewModel.toggleSelection(file) },
+            toggleSelection = { itemPath -> viewModel.toggleSelection(itemPath) }
         )
 
     }
