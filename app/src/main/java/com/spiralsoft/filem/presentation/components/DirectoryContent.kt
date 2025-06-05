@@ -11,14 +11,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.Box
 import androidx.compose.ui.Alignment
-import java.io.File
+import java.nio.file.Path
 
 @Composable
 fun DirectoryContent(
     state: DirectoryViewState, // Estado de la pantalla
     modifier: Modifier = Modifier, // Modificador para personalizar la apariencia
-    onNavigateTo: (String) -> Unit, // Función para navegar a una ruta
-    toggleSelection: (File) -> Unit // Función para seleccionar un elemento
+    onNavigateTo: (Path) -> Unit, // Función para navegar a una ruta
+    toggleSelection: (Path) -> Unit // Función para seleccionar un elemento
 ) {
     when {
         // Mostrar el indicador de carga
@@ -45,6 +45,7 @@ fun DirectoryContent(
                 toggleSelection = toggleSelection
             )
         }
+
     }
 
 }
