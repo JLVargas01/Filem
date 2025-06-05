@@ -1,10 +1,10 @@
 package com.spiralsoft.filem.domain.repository
 
-import java.io.File
+import java.nio.file.Path
 
 interface DirectoryViewState {
-    val files: List<File> // Lista de archivos disponibles
-    val directories: List<File> // Lista de directorios disponibles
+    val files: List<Path> // Lista de archivos disponibles
+    val directories: List<Path> // Lista de directorios disponibles
     val isLoading: Boolean // Estado de carga
-    val selectedItems: Set<File> // Lista de elementos seleccionados
+    val selectedItems: Set<Path> // Lista de elementos seleccionados
 }
