@@ -3,12 +3,14 @@
  */
 package com.spiralsoft.filem.presentation.navigation
 
+import com.spiralsoft.filem.presentation.navigation.AppNavigator.Explorer.createRoute
+import com.spiralsoft.filem.presentation.screen.directory.DirectoryExplorerScreen
+import com.spiralsoft.filem.presentation.screen.hub.HubFileExplorerScreen
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.spiralsoft.filem.presentation.screen.directory.DirectoryExplorerScreen
-import com.spiralsoft.filem.presentation.screen.hub.HubFileExplorerScreen
+import java.nio.file.Path
 
 @Composable
 fun AppNavHost() {
@@ -25,8 +27,8 @@ fun AppNavHost() {
             route = AppNavigator.Hub.ROUTE
         ) {
             HubFileExplorerScreen(
-                onNavigateToFile = { path ->
-                    navController.navigate(AppNavigator.Explorer.createRoute(path))
+                onNavigateToFile = {
+                    path -> navController.navigate(createRoute(path))
                 }
             )
         }
@@ -36,7 +38,7 @@ fun AppNavHost() {
             route = AppNavigator.Explorer.ROUTE,
             arguments = AppNavigator.Explorer.navArguments()
         ) { backStackEntry ->
-            val path = AppNavigator.Explorer.extractPath(backStackEntry)
+            val path: Path = AppNavigator.Explorer.extractPath(backStackEntry)
             DirectoryExplorerScreen(
                 initialPath = path,
                 onNavigateBack = { navController.popBackStack() }
