@@ -1,14 +1,14 @@
 package com.spiralsoft.filem.domain.repository
 
-import java.io.File
+import java.nio.file.Path
 
 interface FileCrud {
 
-    fun createFile(name: String): Boolean // Create
-    fun getFilesInDirectory(directoryPath: File): List<File> // Read
-    fun renameFile(file: File, newName: String): Boolean // Update
-    fun moveFile(file: File, targetDir: File): Boolean // Update
-    fun copyFile(file: File, targetDir: File): Boolean // Update
-    fun deleteFile(file: File): Boolean // Delete
+    fun createFile(dirPath: Path, name: String): Boolean // Create
+    fun getFilesInDirectory(dirPath: Path): List<Path> // Read
+    fun renameFile(filePath: Path, newName: String): Boolean // Update
+    fun moveFile(filePath: Path, targetDir: Path): Boolean // Update
+    fun copyFile(filePath: Path, targetDir: Path): Boolean // Update
+    fun deleteFile(filePath: Path): Boolean // Delete
 
 }
