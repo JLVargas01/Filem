@@ -5,7 +5,6 @@
  */
 package com.spiralsoft.filem.presentation.components
 
-import com.spiralsoft.filem.domain.utils.cleanPath
 import com.spiralsoft.filem.constants.FileType
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -38,17 +37,18 @@ import coil3.compose.rememberAsyncImagePainter
 import coil3.request.crossfade
 import coil3.request.error
 import coil3.request.placeholder
+import java.nio.file.Path
 import java.io.File
 
 @Composable
 fun FileItem(
-    file: File,
+    pathFile: Path,
     isSelected: Boolean,
     onClick: () -> Unit,
     onLongClick: () -> Unit
 ) {
 
-    val fileType = remember(file) { FileType.fromFile(file) }
+    val fileType = remember(pathFile) { FileType.fromFile(pathFile.toFile()) }
 
     Card(
         modifier = Modifier
@@ -74,7 +74,7 @@ fun FileItem(
                 contentAlignment = Alignment.Center,
                 content = {
                     // Ponerle el icono al tipo de archivo
-                    FileIcon(file = file, fileType = fileType)
+                    FileIcon(file = pathFile.toFile(), fileType = fileType)
                 }
             )
 
@@ -82,11 +82,11 @@ fun FileItem(
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = file.name.ifBlank { file.absolutePath.cleanPath() },
+                    text = pathFile.fileName.toString() ,
                     style = MaterialTheme.typography.titleMedium
                 )
                 Text(
-                    text = file.absolutePath.cleanPath(),
+                    text = pathFile.toString(),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

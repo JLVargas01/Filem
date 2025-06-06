@@ -6,7 +6,6 @@
 package com.spiralsoft.filem.presentation.components
 
 import com.spiralsoft.filem.R
-import com.spiralsoft.filem.domain.utils.cleanPath
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -28,11 +27,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.combinedClickable
-import java.io.File
+import java.nio.file.Path
 
 @Composable
 fun DirectoryItem(
-    dir: File,
+    pathDir: Path,
     isSelected: Boolean,
     onClick: () -> Unit,
     onLongClick: () -> Unit
@@ -72,11 +71,11 @@ fun DirectoryItem(
             // Información del directorio
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = dir.name.ifBlank { dir.absolutePath.cleanPath() },
+                    text = pathDir.fileName.toString(),
                     style = MaterialTheme.typography.titleMedium
                 )
                 Text(
-                    text = dir.absolutePath.cleanPath(),
+                    text = pathDir.toString(),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
