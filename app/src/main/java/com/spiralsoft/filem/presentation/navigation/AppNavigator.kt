@@ -9,8 +9,6 @@ import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
-import java.nio.file.Path
-import java.nio.file.Paths
 
 object AppNavigator {
 
@@ -25,9 +23,8 @@ object AppNavigator {
         const val ROUTE: String = "$BASE/{path}"
 
         // Construye una ruta de navegación para el explorador de archivos
-        fun createRoute(path: Path): Path {
-            val route = "$BASE/${Uri.encode(path.toString())}"
-            return Paths.get(route)
+        fun createRoute(path: String): String {
+            return "$BASE/${Uri.encode(path)}"
         }
 
         // Obtiene los argumentos de navegación para el explorador de archivos
@@ -36,11 +33,9 @@ object AppNavigator {
         }
 
         // Extrae la ruta de navegación del explorador de archivos
-        fun extractPath(backStackEntry: NavBackStackEntry): Path {
-            val pathString = backStackEntry.arguments?.getString("path")
-                ?.let { Uri.decode(it) }
+        fun extractPath(backStackEntry: NavBackStackEntry): String {
+            return backStackEntry.arguments?.getString("path")?.let { Uri.decode(it) }
                 ?: Environment.getExternalStorageDirectory().absolutePath
-            return Paths.get(pathString)
         }
 
     }
