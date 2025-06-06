@@ -1,4 +1,4 @@
-package com.spiralsoft.filem.ui.theme
+package com.spiralsoft.filem.data.source
 
 import android.content.Context
 import androidx.datastore.preferences.core.booleanPreferencesKey
