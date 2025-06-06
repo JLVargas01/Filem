@@ -20,7 +20,7 @@ enum class FileType(
         iconRes = R.drawable.icon_img0,
         mimeType = "image/*",
         onClickAction = { context, file ->
-            if (FileOpener.canOpenFile(context, file, "video/*")) {
+            if (FileOpener.canOpenFile(context, file, "image/*")) {
                 FileOpener.openImage(context, file)
             } else {
                 Toast.makeText(context, "No hay aplicaciones disponibles para abrir este archivo", Toast.LENGTH_SHORT).show()
@@ -31,7 +31,7 @@ enum class FileType(
         iconRes = R.drawable.icon_audio0,
         mimeType = "audio/*",
         onClickAction = { context, file ->
-            if (FileOpener.canOpenFile(context, file, "video/*")) {
+            if (FileOpener.canOpenFile(context, file, "audio/*")) {
                 FileOpener.openAudio(context, file)
             } else {
                 Toast.makeText(context, "No hay aplicaciones disponibles para abrir este archivo", Toast.LENGTH_SHORT).show()
@@ -53,7 +53,7 @@ enum class FileType(
         iconRes = R.drawable.icon_document0,
         mimeType = "text/*",
         onClickAction = { context, file ->
-            if (FileOpener.canOpenFile(context, file, "video/*")) {
+            if (FileOpener.canOpenFile(context, file, "text/*")) {
                 FileOpener.openText(context, file)
             } else {
                 Toast.makeText(context, "No hay aplicaciones disponibles para abrir este archivo", Toast.LENGTH_SHORT).show()
@@ -64,7 +64,7 @@ enum class FileType(
         iconRes = R.drawable.icon_pdf0,
         mimeType = "application/pdf",
         onClickAction = { context, file ->
-            if (FileOpener.canOpenFile(context, file, "video/*")) {
+            if (FileOpener.canOpenFile(context, file, "application/pdf")) {
                 FileOpener.openPdf(context, file)
             } else {
                 Toast.makeText(context, "No hay aplicaciones disponibles para abrir este archivo", Toast.LENGTH_SHORT).show()
@@ -75,7 +75,7 @@ enum class FileType(
         iconRes = R.drawable.icon_archive0,
         mimeType = "application/zip",
         onClickAction = { context, file ->
-            if (FileOpener.canOpenFile(context, file, "video/*")) {
+            if (FileOpener.canOpenFile(context, file, "application/zip")) {
                 FileOpener.openCompressed(context, file)
             } else {
                 Toast.makeText(context, "No hay aplicaciones disponibles para abrir este archivo", Toast.LENGTH_SHORT).show()
@@ -86,7 +86,7 @@ enum class FileType(
         iconRes = R.drawable.icon_datafile0,
         mimeType = "application/octet-stream",
         onClickAction = { context, file ->
-            if (FileOpener.canOpenFile(context, file, "video/*")) {
+            if (FileOpener.canOpenFile(context, file, "application/octet-stream")) {
                 FileOpener.openText(context, file)
             } else {
                 Toast.makeText(context, "No hay aplicaciones disponibles para abrir este archivo", Toast.LENGTH_SHORT).show()
