@@ -18,7 +18,7 @@ class HubDirectoryExplorerViewModel : ViewModel() {
     private val _state: MutableStateFlow<HubDirectoryExplorerState> =
         MutableStateFlow(HubDirectoryExplorerState()) // Estado de la pantalla privado
     val state: StateFlow<HubDirectoryExplorerState> get() = _state  // Estado de la pantalla público
-    private val internalStorage = Environment.getExternalStorageDirectory() // Archivo de tipo 'File' de root
+    private val internalStorage: Path = Environment.getExternalStorageDirectory().toPath() // File de root
     private val fileManager: LocalManager = LocalManager() // Manager de archivos
 
     // Cargar directorios al iniciar la pantalla
@@ -32,14 +32,8 @@ class HubDirectoryExplorerViewModel : ViewModel() {
 
             _state.value = _state.value.copy(isLoading = true)
 
-            val rootDirectories: MutableList<Path> = mutableListOf() // Lista de directorios de root
-            val rootFiles: MutableList<Path> = mutableListOf() // LIsta de archivos de root
-
-            // Buscar el contenido del almacenamiento interno
-            if (internalStorage.exists() && internalStorage.canRead()) {
-                rootDirectories.addAll(fileManager.getDirectories(internalStorage.toPath()))
-                rootFiles.addAll(fileManager.getFilesInDirectory(internalStorage.toPath()))
-            }
+            val rootDirectories: List<Path> = fileManager.getDirectories(internalStorage) // Lista de directorios de root
+            val rootFiles: List<Path> = fileManager.getFilesInDirectory(internalStorage) // LIsta de archivos de root
 
             // Actualizar el estado de la pantalla
             _state.value = _state.value.copy(
@@ -52,7 +46,7 @@ class HubDirectoryExplorerViewModel : ViewModel() {
 
     // Crear un nuevo directorio en root y recargar el contenido
     fun createDirAndReload(newDirName: String): Boolean {
-        if (fileManager.createDirectory(internalStorage.toPath() ,newDirName)) {
+        if (fileManager.createDirectory(internalStorage, newDirName)) {
             loadPath()
             return true
         }
@@ -60,8 +54,8 @@ class HubDirectoryExplorerViewModel : ViewModel() {
     }
 
     fun deleteSelectedItemsAndReload() {
-        val selected: Set<Path> = _state.value.selectedItems
-        selected.forEach { fileManager.deleteDirectory(it) }
+        val toDelete = _state.value.selectedItems
+        toDelete.forEach { fileManager.deleteDirectory(it) } // Solo directorios por ahora
         clearSelection()
         loadPath()
     }
