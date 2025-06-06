@@ -3,22 +3,23 @@
  */
 package com.spiralsoft.filem.presentation.screen.hub
 
+import com.spiralsoft.filem.domain.usecase.LocalManager
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.Dispatchers
-import androidx.lifecycle.viewModelScope
-import java.io.File
 import android.os.Environment
-import com.spiralsoft.filem.domain.usecase.LocalManager
+import java.nio.file.Path
 
 class HubDirectoryExplorerViewModel : ViewModel() {
 
-    private val _state = MutableStateFlow(HubDirectoryExplorerState()) // Estado de la pantalla privado
+    private val _state: MutableStateFlow<HubDirectoryExplorerState> =
+        MutableStateFlow(HubDirectoryExplorerState()) // Estado de la pantalla privado
     val state: StateFlow<HubDirectoryExplorerState> get() = _state  // Estado de la pantalla público
-    private val internalStorage: File = Environment.getExternalStorageDirectory() // File de root
-    private val fileManager: LocalManager = LocalManager(internalStorage) // Manager de archivos
+    private val internalStorage = Environment.getExternalStorageDirectory() // Archivo de tipo 'File' de root
+    private val fileManager: LocalManager = LocalManager() // Manager de archivos
 
     // Cargar directorios al iniciar la pantalla
     init {
@@ -29,15 +30,15 @@ class HubDirectoryExplorerViewModel : ViewModel() {
     private fun loadPath() {
         viewModelScope.launch(Dispatchers.IO) {
 
-            _state.value = _state.value.copy(isLoading = false)
+            _state.value = _state.value.copy(isLoading = true)
 
-            val rootDirectories = mutableListOf<File>() // Lista de directorios de root
-            val rootFiles = mutableListOf<File>() // LIsta de archivos de root
+            val rootDirectories: MutableList<Path> = mutableListOf() // Lista de directorios de root
+            val rootFiles: MutableList<Path> = mutableListOf() // LIsta de archivos de root
 
             // Buscar el contenido del almacenamiento interno
             if (internalStorage.exists() && internalStorage.canRead()) {
-                rootDirectories.addAll(fileManager.getDirectories(internalStorage))
-                rootFiles.addAll(fileManager.getFilesInDirectory(internalStorage))
+                rootDirectories.addAll(fileManager.getDirectories(internalStorage.toPath()))
+                rootFiles.addAll(fileManager.getFilesInDirectory(internalStorage.toPath()))
             }
 
             // Actualizar el estado de la pantalla
@@ -49,49 +50,34 @@ class HubDirectoryExplorerViewModel : ViewModel() {
         }
     }
 
-    fun toggleSelection(file: File) {
-        val current = _state.value.selectedItems.toMutableSet()
-        if (current.contains(file)) {
-            current.remove(file)
-        } else {
-            current.add(file)
-        }
-        _state.value = _state.value.copy(selectedItems = current)
-    }
-
-    fun clearSelection() {
-        _state.value = _state.value.copy(selectedItems = emptySet())
-    }
-
     // Crear un nuevo directorio en root y recargar el contenido
     fun createDirAndReload(newDirName: String): Boolean {
-        if (fileManager.createDirectory(newDirName)) {
+        if (fileManager.createDirectory(internalStorage.toPath() ,newDirName)) {
             loadPath()
             return true
         }
         return false
     }
 
-    fun deleteDirAndReload(dirDelete: File): Boolean {
-        if (fileManager.deleteDirectory(dirDelete)) {
-            loadPath()
-            return true
-        }
-        return false
-    }
-
-    fun deleteSelectedAndReload() {
-        val toDelete = _state.value.selectedItems
-        toDelete.forEach { fileManager.deleteDirectory(it) } // Solo directorios por ahora
+    fun deleteSelectedItemsAndReload() {
+        val selected: Set<Path> = _state.value.selectedItems
+        selected.forEach { fileManager.deleteDirectory(it) }
         clearSelection()
         loadPath()
     }
 
-    fun deleteSelectedItems() {
-        val selected = _state.value.selectedItems
-        selected.forEach { fileManager.deleteDirectory(it) }
+    fun toggleSelection(itemPath: Path) {
+        val current: MutableSet<Path> = _state.value.selectedItems.toMutableSet()
+        if (current.contains(itemPath)) {
+            current.remove(itemPath)
+        } else {
+            current.add(itemPath)
+        }
+        _state.value = _state.value.copy(selectedItems = current)
+    }
+
+    private fun clearSelection() {
         _state.value = _state.value.copy(selectedItems = emptySet())
-        loadPath()
     }
 
 }
