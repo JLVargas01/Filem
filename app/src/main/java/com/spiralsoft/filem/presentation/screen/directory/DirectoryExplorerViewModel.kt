@@ -39,8 +39,8 @@ class DirectoryExplorerViewModel : ViewModel() {
                 currentPath = pathDirectory
             )
 
-            val subDirs = fileManager.getDirectories(pathDirectory) // Lista de directorios de root
-            val subFiles = fileManager.getFilesInDirectory(pathDirectory) // LIsta de archivos de root
+            val subDirs: List<Path> = fileManager.getDirectories(pathDirectory) // Lista de directorios de root
+            val subFiles: List<Path> = fileManager.getFilesInDirectory(pathDirectory) // LIsta de archivos de root
 
             _state.value = _state.value.copy(
                 directories = subDirs,
