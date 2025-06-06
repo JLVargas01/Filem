@@ -1,3 +1,7 @@
+/**
+ * Representa una lista de archivos(FileListContent),
+ * con sus caracteristicas y las acciones que puede realizar
+ */
 package com.spiralsoft.filem.presentation.components
 
 import androidx.compose.foundation.layout.Arrangement
@@ -6,16 +10,16 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import java.io.File
+import java.nio.file.Path
 
 @Composable
 fun FileListContent(
-    directories: List<File>,
+    directories: List<Path>,
     modifier: Modifier = Modifier,
-    files: List<File>,
-    selectedItems: Set<File>,
-    onNavigateTo: (String) -> Unit,
-    toggleSelection: (File) -> Unit
+    files: List<Path>,
+    selectedItems: Set<Path>,
+    onNavigateTo: (Path) -> Unit,
+    toggleSelection: (Path) -> Unit
 ) {
     LazyColumn(
         modifier = modifier,
@@ -23,22 +27,22 @@ fun FileListContent(
     ) {
         items(directories) { dir ->
             DirectoryItem(
-                dir = dir,
+                pathDir = dir,
                 isSelected = selectedItems.contains(dir),
                 onClick = {
                     if (selectedItems.isNotEmpty()) toggleSelection(dir)
-                    else onNavigateTo(dir.absolutePath)
+                    else onNavigateTo(dir)
                 },
                 onLongClick = { toggleSelection(dir) }
             )
         }
         items(files) { file ->
             FileItem(
-                file = file,
+                pathFile = file,
                 isSelected = selectedItems.contains(file),
                 onClick = {
                     if (selectedItems.isNotEmpty()) toggleSelection(file)
-                    else onNavigateTo(file.absolutePath)
+                    else onNavigateTo(file)
                 },
                 onLongClick = { toggleSelection(file) },
             )
