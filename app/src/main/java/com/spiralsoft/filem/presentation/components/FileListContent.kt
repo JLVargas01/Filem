@@ -4,11 +4,14 @@
  */
 package com.spiralsoft.filem.presentation.components
 
+import com.spiralsoft.filem.constants.FileType
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import java.nio.file.Path
 
@@ -21,6 +24,7 @@ fun FileListContent(
     onNavigateTo: (Path) -> Unit,
     toggleSelection: (Path) -> Unit
 ) {
+    val context = LocalContext.current
     LazyColumn(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -37,12 +41,17 @@ fun FileListContent(
             )
         }
         items(files) { file ->
+            val fileType: FileType = remember(file) { FileType.fromFile(file.toFile()) }
             FileItem(
                 pathFile = file,
+                fileType = fileType,
                 isSelected = selectedItems.contains(file),
                 onClick = {
-                    if (selectedItems.isNotEmpty()) toggleSelection(file)
-                    else onNavigateTo(file)
+                    if (selectedItems.isNotEmpty()) {
+                        toggleSelection(file)
+                    } else  {
+                        fileType.onClickAction(context, file.toFile())
+                    }
                 },
                 onLongClick = { toggleSelection(file) },
             )
