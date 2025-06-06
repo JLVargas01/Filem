@@ -24,7 +24,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Alignment
@@ -34,13 +33,11 @@ import java.nio.file.Path
 @Composable
 fun FileItem(
     pathFile: Path,
+    fileType: FileType,
     isSelected: Boolean,
     onClick: () -> Unit,
     onLongClick: () -> Unit
 ) {
-
-    val fileType = remember(pathFile) { FileType.fromFile(pathFile.toFile()) }
-
     Card(
         modifier = Modifier
             .fillMaxWidth()
