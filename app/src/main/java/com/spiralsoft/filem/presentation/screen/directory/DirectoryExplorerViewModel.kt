@@ -3,73 +3,61 @@
  */
 package com.spiralsoft.filem.presentation.screen.directory
 
+import com.spiralsoft.filem.domain.usecase.LocalManager
 import android.os.Environment
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.Dispatchers
-import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.StateFlow
-import java.io.File
+import java.nio.file.Path
 
 class DirectoryExplorerViewModel : ViewModel() {
 
-    private val initialPath: String = Environment.getExternalStorageDirectory().absolutePath // Ruta del directorio actual
-    private val pathStack: MutableList<String> = mutableListOf() // Pila de rutas
+    private val initialPath: Path = Environment.getExternalStorageDirectory().toPath() // Ruta del directorio actual
+    private val pathStack: MutableList<Path> = mutableListOf() // Pila de rutas
     private val _state: MutableStateFlow<DirectoryExplorerViewState> =
         MutableStateFlow(DirectoryExplorerViewState(currentPath = initialPath)) // Estado de la pantalla
     val state: StateFlow<DirectoryExplorerViewState> get() = _state // Estado publico de la pantalla
+    private val fileManager: LocalManager = LocalManager() // Manager de archivos
 
-    /**
-     *  Inicializa la pantalla con el directorio especificado
-     *  @param path Ruta del directorio inicial
-     */
-    fun initWithPath(path: String) {
+    //  Inicializa la pantalla con el directorio especificado
+    fun initWithPath(pathDirectory: Path) {
         if (pathStack.isEmpty()) {
-            pathStack.add(path)
-            loadPath(path)
+            pathStack.add(pathDirectory)
+            loadPath(pathDirectory)
         }
     }
 
-    /**
-     * Carga el contenido del directorio especificado
-     * @param path Ruta del directorio para cargar
-     */
-    private fun loadPath(path: String) {
+    //  Carga el contenido del directorio especificado
+    private fun loadPath(pathDirectory: Path) {
         viewModelScope.launch(Dispatchers.IO) {
+
             _state.value = _state.value.copy(
                 isLoading = true,
-                currentPath = path
+                currentPath = pathDirectory
             )
 
-            val dir = File(path)
-            val subDirs = dir.listFiles()?.filter {
-                it.isDirectory && it.canRead() && !it.isHidden
-            }.orEmpty()
-            val subFiles = dir.listFiles()?.filter {
-                it.isFile && it.canRead() && !it.isHidden
-            }.orEmpty()
+            val subDirs = fileManager.getDirectories(pathDirectory) // Lista de directorios de root
+            val subFiles = fileManager.getFilesInDirectory(pathDirectory) // LIsta de archivos de root
 
             _state.value = _state.value.copy(
                 directories = subDirs,
                 files = subFiles,
                 isLoading = false
             )
+
         }
     }
 
-    /**
-     * Navega hacia un subdirectorio
-     * @param path Ruta del subdirectorio
-     */
-    fun navigateTo(path: String) {
-        pathStack.add(path)
-        loadPath(path)
+    //  Navega hacia un subdirectorio
+    fun navigateTo(pathDirectory: Path) {
+        pathStack.add(pathDirectory)
+        loadPath(pathDirectory)
     }
 
-    /**
-     * Navega hacia atrás en la pila de rutas
-     */
+    //  Navega hacia atrás en la pila de rutas
     fun navigateBack(): Boolean {
         if (pathStack.size <= 1) return false
         pathStack.removeAt(pathStack.lastIndex)
@@ -77,12 +65,13 @@ class DirectoryExplorerViewModel : ViewModel() {
         return true
     }
 
-    fun toggleSelection(file: File) {
+    //  Selecciona o deselecciona un elemento
+    fun toggleSelection(itemPath: Path) {
         val current = _state.value.selectedItems.toMutableSet()
-        if (current.contains(file)) {
-            current.remove(file)
+        if (current.contains(itemPath)) {
+            current.remove(itemPath)
         } else {
-            current.add(file)
+            current.add(itemPath)
         }
         _state.value = _state.value.copy(selectedItems = current)
     }
