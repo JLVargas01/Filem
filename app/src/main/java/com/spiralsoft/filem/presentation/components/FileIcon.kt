@@ -1,3 +1,7 @@
+/**
+ * Representa el icono de un archivo(FileIcon),
+ * El icono depende del tipo de archivo
+ */
 package com.spiralsoft.filem.presentation.components
 
 import com.spiralsoft.filem.constants.FileType
@@ -42,14 +46,13 @@ fun FileIcon(file: File, fileType: FileType) {
                 contentScale = ContentScale.Crop
             )
         } else -> {
-        // Otro tipo de archivo, muestra el icono
-        Image(
-            painter = painterResource(id = fileType.iconRes),
-            contentDescription = "Ícono de archivo",
-            modifier = Modifier.size(32.dp)
-        )
-    }
-
+            // Otro tipo de archivo, muestra el icono
+            Image(
+                painter = painterResource(id = fileType.iconRes),
+                contentDescription = "Ícono de archivo",
+                modifier = Modifier.size(32.dp)
+            )
+        }
     }
 
 }
